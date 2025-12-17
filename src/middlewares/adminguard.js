@@ -8,7 +8,7 @@
 async function adminguard(req, res, next) {
 
     try {
-        if (req.user.role !== "ADMIN") throw "Unauthorized";
+        if (req.user.roleType !== "ADMINISTRATOR") throw "Unauthorized";
         return next();
     } catch (err) {
         return res.status(401).json({ message: err });

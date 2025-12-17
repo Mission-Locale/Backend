@@ -47,8 +47,8 @@ Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sé
 | **POST** | `/auth/register`     | 📝 **Inscription** d’un nouvel utilisateur                     |
 | **POST** | `/auth/login`        | 🔑 **Connexion** & récupération du token **JWT**               |
 | **POST** | `/auth/logout`       | 🚪 **Déconnexion** de l'utilisateur                            |
-| **POST** | `/auth/force-logout` | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils** |
-| **POST** | `/auth/refresh`      | ♻️ **Rafraîchissement** du token **JWT**                       |
+| **GET**  | `/auth/force-logout` | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils** |
+| **GET**  | `/auth/refresh`      | ♻️ **Rafraîchissement** du token **JWT**                       |
 
 ## 🙋‍♂ Profil
 
@@ -58,11 +58,11 @@ Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès a
 | ---------- | ---------- | ---------------------------------- |
 | **GET**    | `/profile` | 🆔 Récupérer **son propre profil** |
 | **PATCH**  | `/profile` | ✍️ Modifier **son profil**         |
-| **DELETE** | `/profile` | 🗑️ Supprimer **son propre compte** |
+| ~~**DELETE**~~ | ~~`/profile`~~ | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
 
 ## 📂 Gestion des Documents
-
 Gestion des documents associés au profil utilisateur.
+**Incomplet**
 
 | Méthode    | Route                    | Description                                                        |
 | ---------- | ------------------------ | ------------------------------------------------------------------ |
@@ -72,8 +72,8 @@ Gestion des documents associés au profil utilisateur.
 | **DELETE** | `/profile/documents/:id` | 🗑️ Supprimer un document spécifique du profil utilisateur          |
 
 ## 🗓 Gestion des Rendez-vous
-
 Prise de rendez-vous entre utilisateurs et conseillers
+**Inexistant**
 
 | Méthode    | Route               | Description                                                                                            |
 | ---------- | ------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -84,8 +84,8 @@ Prise de rendez-vous entre utilisateurs et conseillers
 | **DELETE** | `/appointments/:id` | ❌ Annuler ou supprimer un **rendez-vous**                                                             |
 
 ## 💬 Gestion des Messages
-
 Envoi de messages entre utilisateur et conseillé
+**Inexistant**
 
 | Méthode    | Route           | Description                                                                     |
 | ---------- | --------------- | ------------------------------------------------------------------------------- |
@@ -98,17 +98,18 @@ Envoi de messages entre utilisateur et conseillé
 
 ### Gestion des Ateliers (événements récurrents)
 
-| Méthode    | Route            | Description                                          |
-| ---------- | ---------------- | ---------------------------------------------------- |
-| **POST**   | `/workshops`     | 📝 Créer un nouvel **atelier** (événement récurrent) |
-| **GET**    | `/workshops`     | 🔍 Récupérer la liste de tous les **atelier**        |
-| **GET**    | `/workshops/:id` | 🔎 Récupérer un **atelier** spécifique par ID        |
-| **PATCH**  | `/workshops/:id` | ✏️ Modifier un **atelier**                           |
-| **DELETE** | `/workshops/:id` | 🗑️ Supprimer un **atelier**                          |
+| Méthode    | Route                   | Description                                          |
+| ---------- | ----------------------- | ---------------------------------------------------- |
+| **POST**   | `/workshops`            | 📝 Créer un nouvel **atelier** (événement récurrent) |
+| **GET**    | `/workshops`            | 🔍 Récupérer la liste de tous les **atelier**        |
+| **GET**    | `/workshops/detail/:id` | 🔎 Récupérer un **atelier** spécifique par ID        |
+| **PATCH**  | `/workshops/:id`        | ✏️ Modifier un **atelier**                           |
+| **DELETE** | `/workshops/:id`        | 🗑️ Supprimer un **atelier**                          |
 
 ---
 
 ### Gestion des Events (instanciations des ateliers)
+**Inexistant**
 
 | Méthode    | Route         | Description                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
@@ -121,6 +122,7 @@ Envoi de messages entre utilisateur et conseillé
 ---
 
 ### Gestion des Inscriptions aux Events
+**Inexistant**
 
 | Méthode    | Route                       | Description                                                        |
 | ---------- | --------------------------- | ------------------------------------------------------------------ |
