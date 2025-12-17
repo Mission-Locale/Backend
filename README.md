@@ -20,15 +20,14 @@ Partie backend du projet de l'application web de la Mission Locale du Pays d'Aub
 ## 🛠 Initialisation
 Liste des commandes pour initialiser et utiliser le projet:
 
-**Clonez le projet**, executez: ```npm run init```,<br />
-Créer le fichier ```.env``` (en prennant pour exemple ```exemple.env```) et configurer le, <br />
-En cas de **modification des models prisma** executez: ```npm run migrate```.
+**Clonez le projet**, executez: ```npm run init```,  
+Créer le fichier ```.env``` (en prennant pour exemple ```exemple.env```) et configurer le,   
+En cas de **modification des modèles prisma** executez: ```npm run migrate```.
 
 ### Manipulation développeur
 Si vous avez besoin de ré-initialiser entièrement la base de donnée en environnement de développement après un reset des migrations, veuillez utilisez la commande ```npm run migrate reset```
 
 ## 👥 Utilisateurs
-
 CRUD pour la gestion des utilisateurs depuis un compte **admin**.
 
 | Méthode    | Route        | Description                                                      |
@@ -39,7 +38,6 @@ CRUD pour la gestion des utilisateurs depuis un compte **admin**.
 | **DELETE** | `/users/:id` | ❌ Supprimer un utilisateur                                      |
 
 ## 🔐 Authentification
-
 Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sécurité...)_.
 
 | Méthode  | Route                | Description                                                    |
@@ -60,9 +58,8 @@ Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès a
 | **PATCH**  | `/profile` | ✍️ Modifier **son profil**         |
 | ~~**DELETE**~~ | ~~`/profile`~~ | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
 
-## 📂 Gestion des Documents
-Gestion des documents associés au profil utilisateur.
-**Incomplet**
+## 📂 Gestion des Documents (**Incomplet**)
+Gestion des documents associés au profil utilisateur.  
 
 | Méthode    | Route                    | Description                                                        |
 | ---------- | ------------------------ | ------------------------------------------------------------------ |
@@ -71,9 +68,8 @@ Gestion des documents associés au profil utilisateur.
 | **PATCH**  | `/profile/documents/:id` | ✏️ Modifier un document spécifique du profil utilisateur           |
 | **DELETE** | `/profile/documents/:id` | 🗑️ Supprimer un document spécifique du profil utilisateur          |
 
-## 🗓 Gestion des Rendez-vous
+## 🗓 Gestion des Rendez-vous (**Inexistant**)
 Prise de rendez-vous entre utilisateurs et conseillers
-**Inexistant**
 
 | Méthode    | Route               | Description                                                                                            |
 | ---------- | ------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -83,9 +79,8 @@ Prise de rendez-vous entre utilisateurs et conseillers
 | **PATCH**  | `/appointments/:id` | ✏️ Modifier un **rendez-vous**                                                                         |
 | **DELETE** | `/appointments/:id` | ❌ Annuler ou supprimer un **rendez-vous**                                                             |
 
-## 💬 Gestion des Messages
-Envoi de messages entre utilisateur et conseillé
-**Inexistant**
+## 💬 Gestion des Messages (**Inexistant**)
+Envoi de messages entre utilisateur et conseillé  
 
 | Méthode    | Route           | Description                                                                     |
 | ---------- | --------------- | ------------------------------------------------------------------------------- |
@@ -108,8 +103,7 @@ Envoi de messages entre utilisateur et conseillé
 
 ---
 
-### Gestion des Events (instanciations des ateliers)
-**Inexistant**
+### Gestion des Events (instanciations des ateliers) (**Inexistant**)
 
 | Méthode    | Route         | Description                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
@@ -121,8 +115,7 @@ Envoi de messages entre utilisateur et conseillé
 
 ---
 
-### Gestion des Inscriptions aux Events
-**Inexistant**
+### Gestion des Inscriptions aux Events (**Inexistant**)
 
 | Méthode    | Route                       | Description                                                        |
 | ---------- | --------------------------- | ------------------------------------------------------------------ |
@@ -130,4 +123,4 @@ Envoi de messages entre utilisateur et conseillé
 | **GET**    | `/events/:id/queue`         | 🔍 Récupérer la liste des utilisateurs inscrits à un **événement** |
 | **DELETE** | `/events/:id/queue/:userId` | ❌ Se désinscrire d'un **événement** spécifique                    |
 
-(TODO: Ajouter les chemins des articles)
+**(TODO: Ajouter les chemins des articles)**
