@@ -66,6 +66,7 @@ CREATE TABLE `Article` (
     `title` VARCHAR(191) NOT NULL,
     `description` TEXT NOT NULL,
     `backgroundImagePath` VARCHAR(191) NOT NULL,
+    `cardImagePath` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `author_id` VARCHAR(191) NOT NULL,
@@ -112,6 +113,7 @@ CREATE TABLE `ExternalAnimator` (
 CREATE TABLE `JobSeeker` (
     `job_seeker_id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
+    `assigned_advisor_id` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -209,6 +211,8 @@ CREATE TABLE `Workshop` (
     `description` VARCHAR(191) NOT NULL,
     `cardImagePath` VARCHAR(191) NOT NULL,
     `backgroundImagePath` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Workshop_workshop_id_key`(`workshop_id`),
     PRIMARY KEY (`workshop_id`)
@@ -281,6 +285,9 @@ ALTER TABLE `Document` ADD CONSTRAINT `Document_job_seeker_id_fkey` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_assigned_advisor_id_fkey` FOREIGN KEY (`assigned_advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Message` ADD CONSTRAINT `Message_sender_id_fkey` FOREIGN KEY (`sender_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
