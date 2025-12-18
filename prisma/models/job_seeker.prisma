@@ -4,7 +4,7 @@ model JobSeeker {
     user    User   @relation(fields: [user_id], references: [user_id])
     user_id String @unique
 
-    assigned_advisor Advisor? @relation(fields = [assigned_advisor_id], references = [advisor_id])
+    assigned_advisor Advisor? @relation(fields: [assigned_advisor_id], references: [advisor_id])
     assigned_advisor_id String
 
     appointments  Appointment[]  @relation("app_job_seeker")
