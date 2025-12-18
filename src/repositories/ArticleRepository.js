@@ -56,7 +56,7 @@ class ArticleRepository {
   /* Find a specific news with id */
   async find(article_id) {
     try {
-      return await this.db.news.findUnique({
+      return await this.db.article.findUnique({
         where: { article_id },
         include: {
           tag: true,
