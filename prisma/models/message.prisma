@@ -6,9 +6,9 @@ model Message {
   content    String
 
   sender_id   String
-  sender      User   @relation("sender", fields: [sender_id], references: [user_id])
+  sender      User   @relation("sender", fields: [sender_id], references: [user_id], onDelete: Cascade)
   receiver_id String
-  receiver    User   @relation("receiver", fields: [receiver_id], references: [user_id])
+  receiver    User   @relation("receiver", fields: [receiver_id], references: [user_id], onDelete: Cascade)
 
   sendAt DateTime @default(now())
 }

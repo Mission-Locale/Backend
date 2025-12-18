@@ -1,7 +1,7 @@
 model Advisor {
     advisor_id String @id @unique @default(uuid())
 
-    user    User   @relation(fields: [user_id], references: [user_id])
+    user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
     user_id String @unique
 
     profile_picture_path String

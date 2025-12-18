@@ -4,7 +4,7 @@
 model AppointmentResume {
     appointment_resume_id Int @id @unique @default(autoincrement())
 
-    appointment    Appointment @relation(fields: [appointment_id], references: [appointment_id])
+    appointment    Appointment @relation(fields: [appointment_id], references: [appointment_id], onDelete: Cascade)
     appointment_id Int         @unique
 
     description String @db.Text

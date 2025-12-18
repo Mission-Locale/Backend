@@ -251,10 +251,10 @@ CREATE TABLE `_workshop_tags` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Administrator` ADD CONSTRAINT `Administrator_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Administrator` ADD CONSTRAINT `Administrator_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Advisor` ADD CONSTRAINT `Advisor_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Advisor` ADD CONSTRAINT `Advisor_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Animator` ADD CONSTRAINT `Animator_advisor_id_fkey` FOREIGN KEY (`advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -269,7 +269,7 @@ ALTER TABLE `Appointment` ADD CONSTRAINT `Appointment_advisor_id_fkey` FOREIGN K
 ALTER TABLE `Appointment` ADD CONSTRAINT `Appointment_job_seeker_id_fkey` FOREIGN KEY (`job_seeker_id`) REFERENCES `JobSeeker`(`job_seeker_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AppointmentResume` ADD CONSTRAINT `AppointmentResume_appointment_id_fkey` FOREIGN KEY (`appointment_id`) REFERENCES `Appointment`(`appointment_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AppointmentResume` ADD CONSTRAINT `AppointmentResume_appointment_id_fkey` FOREIGN KEY (`appointment_id`) REFERENCES `Appointment`(`appointment_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Article` ADD CONSTRAINT `Article_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `Administrator`(`administrator_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -284,16 +284,16 @@ ALTER TABLE `CoAnimator` ADD CONSTRAINT `CoAnimator_workshop_recurrence_id_fkey`
 ALTER TABLE `Document` ADD CONSTRAINT `Document_job_seeker_id_fkey` FOREIGN KEY (`job_seeker_id`) REFERENCES `JobSeeker`(`job_seeker_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_assigned_advisor_id_fkey` FOREIGN KEY (`assigned_advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Message` ADD CONSTRAINT `Message_sender_id_fkey` FOREIGN KEY (`sender_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Message` ADD CONSTRAINT `Message_sender_id_fkey` FOREIGN KEY (`sender_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Message` ADD CONSTRAINT `Message_receiver_id_fkey` FOREIGN KEY (`receiver_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Message` ADD CONSTRAINT `Message_receiver_id_fkey` FOREIGN KEY (`receiver_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Registration` ADD CONSTRAINT `Registration_job_seeker_id_fkey` FOREIGN KEY (`job_seeker_id`) REFERENCES `JobSeeker`(`job_seeker_id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -308,7 +308,7 @@ ALTER TABLE `Token` ADD CONSTRAINT `Token_user_id_fkey` FOREIGN KEY (`user_id`) 
 ALTER TABLE `UrgentAppointment` ADD CONSTRAINT `UrgentAppointment_advisor_id_fkey` FOREIGN KEY (`advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `WorkshopRecurrence` ADD CONSTRAINT `WorkshopRecurrence_workshop_id_fkey` FOREIGN KEY (`workshop_id`) REFERENCES `Workshop`(`workshop_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `WorkshopRecurrence` ADD CONSTRAINT `WorkshopRecurrence_workshop_id_fkey` FOREIGN KEY (`workshop_id`) REFERENCES `Workshop`(`workshop_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_article_tags` ADD CONSTRAINT `_article_tags_A_fkey` FOREIGN KEY (`A`) REFERENCES `Article`(`article_id`) ON DELETE CASCADE ON UPDATE CASCADE;

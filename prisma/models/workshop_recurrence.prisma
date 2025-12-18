@@ -13,7 +13,7 @@ model WorkshopRecurrence {
     maxOccupation Int
 
     workshop_id Int
-    workshop    Workshop @relation(fields: [workshop_id], references: [workshop_id])
+    workshop    Workshop @relation(fields: [workshop_id], references: [workshop_id], onDelete: Cascade)
 
     registrations Registration[]
     animators     Animator[]

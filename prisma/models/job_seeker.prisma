@@ -1,7 +1,7 @@
 model JobSeeker {
     job_seeker_id String @id @unique @default(uuid())
 
-    user    User   @relation(fields: [user_id], references: [user_id])
+    user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
     user_id String @unique
 
     assigned_advisor Advisor? @relation(fields: [assigned_advisor_id], references: [advisor_id])
