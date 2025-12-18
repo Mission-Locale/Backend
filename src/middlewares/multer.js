@@ -25,15 +25,15 @@ export const uploadRegister = multer({
     },
 }).single("register_file");
 
-
+// TODO: manage 2 files (images)
 export const uploadArticleImage = multer({
   storage: multer.diskStorage({
-    destination: "public/uploads/news",
+    destination: "public/uploads/article",
     filename: (req, file, cb) => {
       cb(
         null,
         Date.now() +
-          "_news_" +
+          "_article_" +
           randomString(5) +
           file.mimetype.replace("image/", ".")
       );

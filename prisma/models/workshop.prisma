@@ -11,4 +11,7 @@ model Workshop {
 
     recurrences WorkshopRecurrence[] // Pour la repetition des ateliers
     tags        Tag[]                @relation("workshop_tags") // unused
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

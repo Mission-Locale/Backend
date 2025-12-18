@@ -5,6 +5,7 @@ model Article {
   description String @db.Text
 
   backgroundImagePath String
+  cardImagePath       String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

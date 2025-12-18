@@ -16,6 +16,7 @@ const articleRouter = Router()
 
   .post("/articles", authguard, uploadArticleImage, async (req, res) => {
     try {
+      // TODO: manage 2 files (images)
       if (req.file) {
         req.body.backgroundImagePath = req.file.path;
       }

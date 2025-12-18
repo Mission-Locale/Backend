@@ -11,6 +11,7 @@ class ArticleRepository {
           title: data.title,
           description: data.description,
           backgroundImagePath: data.backgroundImagePath,
+          cardImagePath: data.cardImagePath,
           author_id: authorId,
           tag: {
             connectOrCreate: data.tags.map((tagName) => ({
@@ -30,7 +31,7 @@ class ArticleRepository {
     const { limit = 10, page = 1, name, order = "asc" } = filter;
 
     try {
-      return await this.db.news.findMany({
+      return await this.db.article.findMany({
         where: name
           ? {
               OR: [
@@ -53,10 +54,10 @@ class ArticleRepository {
   }
 
   /* Find a specific news with id */
-  async find(news_id) {
+  async find(article_id) {
     try {
       return await this.db.news.findUnique({
-        where: { news_id },
+        where: { article_id },
         include: {
           tag: true,
         },
@@ -68,10 +69,10 @@ class ArticleRepository {
   }
 
   /* Delete a specific news */
-  async delete(news_id) {
+  async delete(article_id) {
     try {
-      return await this.db.news.delete({
-        where: { news_id },
+      return await this.db.article.delete({
+        where: { article_id },
       });
     } catch (err) {
       console.error(err);
@@ -81,9 +82,12 @@ class ArticleRepository {
   }
 
   /* Update a specific news */
-  async update(news_id, data) {
+  async update(article_id, data) {
     try {
-      return await this.db.news.update({ where: { news_id }, data });
+      return await this.db.article.update({
+        where: { article_id },
+        data,
+      });
     } catch (err) {
       console.error(err);
       return null;
@@ -91,4 +95,4 @@ class ArticleRepository {
   }
 }
 
-export default new NewsRepository();
+export default new ArticleRepository();
