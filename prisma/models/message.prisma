@@ -1,14 +1,14 @@
 /**
- * Table pour stoquer les messages entre deux utilisateurs
+ * Table pour stocker les messages entre deux utilisateurs
  */
 model Message {
   message_id Int    @id @unique @default(autoincrement())
-  message    String
+  content    String
 
   sender_id   String
-  sender      User   @relation("sender", fields: [sender_id], references: [user_id])
+  sender      User   @relation("sender", fields: [sender_id], references: [user_id], onDelete: Cascade)
   receiver_id String
-  receiver    User   @relation("receiver", fields: [receiver_id], references: [user_id])
+  receiver    User   @relation("receiver", fields: [receiver_id], references: [user_id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+  sendAt DateTime @default(now())
 }

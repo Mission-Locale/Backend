@@ -1,0 +1,17 @@
+model Article {
+  article_id Int @id @unique @default(autoincrement())
+
+  title       String
+  description String @db.Text
+
+  backgroundImagePath String
+  cardImagePath       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tags Tag[] @relation("article_tags") // Unused
+
+  author_id String
+  author    Administrator @relation(fields: [author_id], references: [administrator_id])
+}

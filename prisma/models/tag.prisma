@@ -1,9 +1,9 @@
 /**
- * Mots clefs/Themes des ateliers
+ * Mots clefs/Themes des ateliers (Unused)
  */
 model Tag {
     tag_name String     @id @unique
     color    String     @unique
     workshop Workshop[] @relation("workshop_tags")
-    news    News[]  @relation("news_tags")
+    articles Article[]  @relation("article_tags")
 }

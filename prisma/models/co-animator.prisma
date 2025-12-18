@@ -1,0 +1,11 @@
+/**
+ * Table pour les animateurs externes animant un atelier
+ */
+model CoAnimator {
+    co_animator_id Int @id @unique @default(autoincrement())
+
+    external_animator_id   String
+    external_animator      ExternalAnimator   @relation(fields: [external_animator_id], references: [external_animator_id], onDelete: Cascade)
+    workshop_recurrence_id Int
+    workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+}

@@ -9,38 +9,25 @@ model User {
     email      String   @unique
     password   String
     phone      String   @db.Char(10)
-    home_phone String?  @db.Char(10)
     birth_date DateTime
 
-    role     Role         @default(USER)
-    verified Boolean      @default(false)
-    token    Token[]
-    document Document[]
-    queue    QueueEntry[]
+    roleType RoleType
 
-    informations_id Int?          @unique
-    informations    Informations? @relation(references: [informations_id], fields: [informations_id])
+    administrator Administrator?
+    advisor       Advisor?
+    jobSeeker     JobSeeker?
 
-    rdv_advisor Appointment[] @relation("rdv_advisor") // RDV du conseillé
-    rdv_member  Appointment[] @relation("rdv_member") // RDV de l'adhérent
+    tokens Token[]
 
-    received_messages Message[] @relation("receiver") // Messages reçus
-    sended_messages   Message[] @relation("sender") // Messages envoyés
-
-    // Liste des adhérents pour le conseillé et le conseillé pour l'adhérant
-    users_id String?
-    user     User[]  @relation("advisor")
-    advisor  User?   @relation("advisor", fields: [users_id], references: [user_id], onDelete: Cascade)
-
-    news                News[] //Liste des actualités rédigé par un conseiller
-    inscriptionFilePath String? @db.VarChar(255) // Chemin du fichier d'inscription
+    receivedMessages Message[] @relation("receiver") // Messages reçus
+    sendedMessages   Message[] @relation("sender") // Messages envoyés
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-enum Role {
-    USER
+enum RoleType {
+    JOB_SEEKER
     ADVISOR
-    ADMIN
+    ADMINISTRATOR
 }

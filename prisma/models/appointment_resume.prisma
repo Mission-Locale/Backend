@@ -1,0 +1,13 @@
+/**
+ * Table pour les résumés de rendez-vous
+ */
+model AppointmentResume {
+    appointment_resume_id Int @id @unique @default(autoincrement())
+
+    appointment    Appointment @relation(fields: [appointment_id], references: [appointment_id], onDelete: Cascade)
+    appointment_id Int         @unique
+
+    description String @db.Text
+
+    createdAt DateTime @default(now())
+}

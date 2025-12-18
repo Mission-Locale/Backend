@@ -5,7 +5,6 @@ import UserRepository from "../repositories/UserRepository.js";
 
 const userRepository = UserRepository;
 const profileRouter = Router()
-
   .get("/profile", authguard, async (req, res) => {
     const user = req.user;
     if (user) {
@@ -32,11 +31,10 @@ const profileRouter = Router()
     }
   })
 
-  .get("/profile/documents", authguard, async (req, res) => {
-
-  })
-  .post("/profile/documents", authguard, async (req, res) => { })
-  .patch("/profile/documents/:id", authguard, async (req, res) => { })
-  .delete("/profile/documents/:id", authguard, async (req, res) => { });
+  // TODO: complete implementations
+  .get("/profile/documents", authguard, async (req, res) => {})
+  .post("/profile/documents", authguard, async (req, res) => {})
+  .patch("/profile/documents/:id", authguard, async (req, res) => {})
+  .delete("/profile/documents/:id", authguard, async (req, res) => {});
 
 export default profileRouter;

@@ -1,0 +1,19 @@
+/**
+ * Table pour les rdv d'urgences
+ */
+model UrgentAppointment {
+    appointment_id Int @id @unique @default(autoincrement())
+
+    advisor_id String?
+    advisor    Advisor? @relation(fields: [advisor_id], references: [advisor_id])
+
+    firstName String
+    lastName  String
+    mail      String
+    phone     String
+
+    description String @db.Text
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

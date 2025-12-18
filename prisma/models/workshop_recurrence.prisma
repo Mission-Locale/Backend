@@ -1,0 +1,21 @@
+/**
+ * Table pour les dates et information complémentaire d'un ateliers
+ */
+model WorkshopRecurrence {
+    workshop_recurrence_id Int @id @unique @default(autoincrement())
+
+    startTime DateTime
+    duration  Int
+
+    topic            String
+    topicDescription String @db.Text
+
+    maxOccupation Int
+
+    workshop_id Int
+    workshop    Workshop @relation(fields: [workshop_id], references: [workshop_id], onDelete: Cascade)
+
+    registrations Registration[]
+    animators     Animator[]
+    coAnimators   CoAnimator[]
+}

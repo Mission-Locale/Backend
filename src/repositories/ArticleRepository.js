@@ -1,24 +1,24 @@
 import database from "../databases/database.js";
 
-class NewsRepository {
+class ArticleRepository {
   db = database;
 
-
-  /* Create news */
-  async create(data, userId) {
+  /* Create article */
+  async create(data, authorId) {
     try {
-      return await this.db.news.create({
+      return await this.db.article.create({
         data: {
           title: data.title,
           description: data.description,
-          imagePath: data.imagePath,
-          user_id: userId,
+          backgroundImagePath: data.backgroundImagePath,
+          cardImagePath: data.cardImagePath,
+          author_id: authorId,
           tag: {
             connectOrCreate: data.tags.map((tagName) => ({
               where: { tag_name: tagName },
               create: { tag_name: tagName, color: "blue" },
             })),
-          }
+          },
         },
       });
     } catch (err) {
@@ -31,14 +31,14 @@ class NewsRepository {
     const { limit = 10, page = 1, name, order = "asc" } = filter;
 
     try {
-      return await this.db.news.findMany({
+      return await this.db.article.findMany({
         where: name
           ? {
-            OR: [
-              { title: { contains: name } },
-              { description: { contains: name } },
-            ],
-          }
+              OR: [
+                { title: { contains: name } },
+                { description: { contains: name } },
+              ],
+            }
           : {},
         orderBy: { createdAt: order },
         skip: (page - 1) * limit,
@@ -54,10 +54,10 @@ class NewsRepository {
   }
 
   /* Find a specific news with id */
-  async find(news_id) {
+  async find(article_id) {
     try {
-      return await this.db.news.findUnique({
-        where: { news_id },
+      return await this.db.article.findUnique({
+        where: { article_id },
         include: {
           tag: true,
         },
@@ -69,10 +69,10 @@ class NewsRepository {
   }
 
   /* Delete a specific news */
-  async delete(news_id) {
+  async delete(article_id) {
     try {
-      return await this.db.news.delete({
-        where: { news_id },
+      return await this.db.article.delete({
+        where: { article_id },
       });
     } catch (err) {
       console.error(err);
@@ -82,9 +82,12 @@ class NewsRepository {
   }
 
   /* Update a specific news */
-  async update(news_id, data) {
+  async update(article_id, data) {
     try {
-      return await this.db.news.update({ where: { news_id }, data });
+      return await this.db.article.update({
+        where: { article_id },
+        data,
+      });
     } catch (err) {
       console.error(err);
       return null;
@@ -92,4 +95,4 @@ class NewsRepository {
   }
 }
 
-export default new NewsRepository();
+export default new ArticleRepository();

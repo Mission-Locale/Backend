@@ -2,34 +2,26 @@
  * Table pour les rdv
  */
 model Appointment {
-    rdv_id   Int             @id @unique @default(autoincrement())
-    title    String
-    content  String
-    type     AppointmentType @default(INSCRIPTION)
-    date     DateTime
-    duration DateTime
+    appointment_id Int      @id @unique @default(autoincrement())
+    startTime      DateTime
+    duration       Int
 
     state AppointmentState @default(PENDING)
 
-    advisor_id String
-    advisor    User   @relation("rdv_advisor", fields: [advisor_id], references: [user_id])
-    member_id  String
-    member     User   @relation("rdv_member", fields: [member_id], references: [user_id])
+    advisor_id    String? // No advisor => Rendez-vous d'inscription
+    advisor       Advisor?  @relation("app_advisor", fields: [advisor_id], references: [advisor_id])
+    job_seeker_id String
+    job_seeker    JobSeeker @relation("app_job_seeker", fields: [job_seeker_id], references: [job_seeker_id])
+
+    appointmentResume AppointmentResume?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-// Exemple de type de rdv
-enum AppointmentType {
-    INSCRIPTION
-    OTHER
-}
-
-// Status du rendez vous (si celui-ci est confirmer, annullé, rater ou passé)
+// Status du rendez vous (si celui-ci est annulé, rater ou passé)
 enum AppointmentState {
     PENDING
-    VALIDATED
     CANCELLED
     MISSED
     COMPLETED

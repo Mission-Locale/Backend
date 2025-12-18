@@ -1,0 +1,17 @@
+/**
+ * Tables pour les inscriptions et file d'attente lié a un evenement
+ */
+model Registration {
+    registration_id Int               @id @unique @default(autoincrement())
+    state           RegistrationState
+
+    job_seeker_id          String
+    job_seeker             JobSeeker          @relation(fields: [job_seeker_id], references: [job_seeker_id], onDelete: Cascade)
+    workshop_recurrence_id Int
+    workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+}
+
+enum RegistrationState {
+    REGISTERED // Inscrit
+    PENDING // En liste d'attente
+}

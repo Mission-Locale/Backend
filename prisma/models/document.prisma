@@ -2,11 +2,13 @@
  * Table pour les documents
  */
 model Document {
-    document_id Int          @id @unique @default(autoincrement())
-    type        DocumentType
-    path        String
-    user_id     String
-    User        User         @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+    document_id Int @id @unique @default(autoincrement())
+
+    type     DocumentType
+    filename String
+
+    job_seeker    JobSeeker @relation(fields: [job_seeker_id], references: [job_seeker_id], onDelete: Cascade)
+    job_seeker_id String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -17,5 +19,6 @@ enum DocumentType {
     JUSTIFICATION_DOMICILE
     PASSPORT
     PERMIS_DE_CONDUIRE
+    REGISTER_FORM
     OTHER
 }

@@ -4,8 +4,6 @@
 model Token {
     token_id Int       @id @unique @default(autoincrement())
     token    String    @unique
-    address  String?
-    agent    String?
     type     TokenType
 
     user_id String
@@ -19,5 +17,5 @@ model Token {
 
 enum TokenType {
     REFRESH_TOKEN
-    MAIL_VALIDATION
+    RESET_TOKEN
 }

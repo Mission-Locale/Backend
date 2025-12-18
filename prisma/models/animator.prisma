@@ -1,0 +1,11 @@
+/**
+ * Table pour les conseillers animant un atelier
+ */
+model Animator {
+    animator_id Int @id @unique @default(autoincrement())
+
+    advisor_id             String
+    advisor                Advisor            @relation(fields: [advisor_id], references: [advisor_id], onDelete: Cascade)
+    workshop_recurrence_id Int
+    workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+}

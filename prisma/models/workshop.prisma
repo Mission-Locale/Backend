@@ -2,10 +2,16 @@
  * Table des ateliers
  */
 model Workshop {
-    workshop_id Int     @id @unique @default(autoincrement())
-    title       String
-    description String
-    imagePath   String?
-    events      Event[] // Pour la repetition des ateliers
-    tag         Tag[]   @relation("workshop_tags")
+    workshop_id Int @id @unique @default(autoincrement())
+
+    title               String
+    description         String
+    cardImagePath       String
+    backgroundImagePath String
+
+    recurrences WorkshopRecurrence[] // Pour la repetition des ateliers
+    tags        Tag[]                @relation("workshop_tags") // unused
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

@@ -22,11 +22,7 @@ const authRouter = Router()
         abortEarly: false,
       });
 
-      let date; //todo create rdv
       delete validatedData.confirm_password;
-      if (validatedData.date) date = new Date(validatedData.date);
-      delete validatedData.date;
-
 
       if (req.file) {
         validatedData.inscriptionFilePath = req.file.path;

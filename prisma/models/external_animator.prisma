@@ -1,0 +1,13 @@
+/**
+ * Table pour les animateurs externes
+ */
+model ExternalAnimator {
+    external_animator_id String @id @unique @default(uuid())
+
+    firstName String
+    lastName  String
+
+    coAnimates CoAnimator[]
+
+    @@unique([firstName, lastName])
+}
