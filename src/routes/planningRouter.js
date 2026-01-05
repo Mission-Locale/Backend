@@ -6,10 +6,10 @@ const planningRouter = Router()
   .get("/planning/registration", async (req, res) => {
     return res.json(microsoft.getRegistrationEvents());
   })
-  .get("/planning/advisor", async (req, res) => {
-    return res.json(microsoft.getAdvisorEvents(req.body.email));
+  .get("/planning/advisor/:mail", async (req, res) => {
+    return res.json(microsoft.getAdvisorEvents(req.params.mail));
   })
-  .get("/planning/free-appointments", async (req, res) => {
+  .get("/planning/free-appointments/:mail", async (req, res) => {
     const { start, end, duration } = req.query;
     if (!start || !end || !duration) {
       return res.status(400).json({ error: "Missing parameters." });
@@ -19,7 +19,7 @@ const planningRouter = Router()
       const startDate = new Date(start);
       const endDate = new Date(end);
       const response = await microsoft.getAdvisorSchedule(
-        req.body.email,
+        req.params.mail,
         startDate,
         endDate,
         duration
