@@ -58,6 +58,16 @@ Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès a
 | **PATCH**  | `/profile` | ✍️ Modifier **son profil**         |
 | ~~**DELETE**~~ | ~~`/profile`~~ | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
 
+## 🗓️ Gestion des Planning
+Récupération des calendriers et des évènements  
+Ces derniers sont des listes d'évènements formatés pour être affiché avec Full-Calendar
+
+| Méthode    | Route                      | Description                                                             |
+| ---------- | -------------------------- | ----------------------------------------------------------------------- |
+| **GET**    | `/registration`            | 🔍 Récupère le planning des **rendez-vous d'inscription**               |
+| **GET**    | `/advisor/:mail`           | 🔍 Récupérer le planning des **rendez-vous et ateliers** du conseiller  |
+| **GET**    | `/free-appointments/:mail` | 🔍 Récupérer les **disponibilités** du conseiller (à revoir)            |
+
 ## 📂 Gestion des Documents (**Incomplet**)
 Gestion des documents associés au profil utilisateur.  
 
