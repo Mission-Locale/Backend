@@ -1,15 +1,23 @@
-import 'isomorphic-fetch';
+import "isomorphic-fetch";
 import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
-import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
+import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
 
+function mapToCalendarEvent(microsoftEvent) {
+  return {
+    id: microsoftEvent.id,
+    timeZone: microsoftEvent.start.timeZone,
+    start: microsoftEvent.start.dateTime,
+    end: microsoftEvent.end.dateTime,
+    title: microsoftEvent.subject,
+  };
+}
 class MicrosoftService {
   client;
   microsoftAccount = process.env.MICROSOFT_ACCOUNT;
   clientId = process.env.MICROSOFT_APPLICATION_ID;
   tenantId = process.env.MICROSOFT_TENANT_ID;
   clientSecret = process.env.MICROSOFT_SECRET;
-  callendarId;
 
   constructor() {
     const clientSecret = new ClientSecretCredential(
@@ -29,36 +37,27 @@ class MicrosoftService {
     this.client = Client.initWithMiddleware({ authProvider, fetchOptions });
   }
 
-  async getCallendars() {
+  async getRegistrationEvents() {
     return await this.client
-      .api(`/users/${this.microsoftAccount}/calendars`)
-      .header("Prefer", 'outlook.timezone="Europe/Paris"')
-      .top(10)
-      .get();
+      .api(`/users/${this.microsoftAccount}/calendars/events`)
+      .top(30)
+      .get()
+      .map(mapToCalendarEvent);
   }
 
-  async getCallendarId() {
-    if (!this.callendarId) {
-      this.callendarId = (await this.getCallendars()).value[0].id;
-    }
-    return this.callendarId;
+  async getAdvisorEvents(advisorEmail) {
+    return await this.client
+      .api(`/users/${advisorEmail}/calendars/events`)
+      .top(30)
+      .get()
+      .map(mapToCalendarEvent);
   }
 
-  async getEvents() {
-    const id = await this.getCallendarId();
+  async getAdvisorSchedule(advisorEmail, start, end, duration = 60) {
     return await this.client
-      .api(`/users/${this.microsoftAccount}/calendars/${id}/events`)
-      .header("Prefer", 'outlook.timezone="Europe/Paris"')
-      .top(10)
-      .get();
-  }
-
-  async getSchedule(start, end, duration = 60) {
-    const id = await this.getCallendarId();
-    return await this.client
-      .api(`/users/${this.microsoftAccount}/calendars/${id}/getSchedule`)
+      .api(`/users/${advisorEmail}/calendars/getSchedule`)
       .post({
-        schedules: [this.microsoftAccount],
+        schedules: [advisorEmail],
         startTime: {
           dateTime: start.toISOString(),
           timeZone: "Europe/Paris",
@@ -72,4 +71,4 @@ class MicrosoftService {
   }
 }
 
-export default new MicrosoftService;
+export default new MicrosoftService();
