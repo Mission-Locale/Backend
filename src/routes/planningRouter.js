@@ -3,13 +3,13 @@ import MicrosoftService from "../repositories/MicrosoftService.js";
 
 const microsoft = MicrosoftService;
 const planningRouter = Router()
-  .get("/registration", async (req, res) => {
+  .get("/planning/registration", async (req, res) => {
     return res.json(microsoft.getRegistrationEvents());
   })
-  .get("/advisor", async (req, res) => {
+  .get("/planning/advisor", async (req, res) => {
     return res.json(microsoft.getAdvisorEvents(req.body.email));
   })
-  .get("/free-appointments", async (req, res) => {
+  .get("/planning/free-appointments", async (req, res) => {
     const { start, end, duration } = req.query;
     if (!start || !end || !duration) {
       return res.status(400).json({ error: "Missing parameters." });
