@@ -58,16 +58,6 @@ Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès a
 | **PATCH**  | `/profile` | ✍️ Modifier **son profil**         |
 | ~~**DELETE**~~ | ~~`/profile`~~ | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
 
-## 🗓️ Gestion des Planning
-Récupération des calendriers et des évènements  
-Ces derniers sont des listes d'évènements formatés pour être affiché avec Full-Calendar
-
-| Méthode    | Route                      | Description                                                             |
-| ---------- | -------------------------- | ----------------------------------------------------------------------- |
-| **GET**    | `/registration`            | 🔍 Récupère le planning des **rendez-vous d'inscription**               |
-| **GET**    | `/advisor/:mail`           | 🔍 Récupérer le planning des **rendez-vous et ateliers** du conseiller  |
-| **GET**    | `/free-appointments/:mail` | 🔍 Récupérer les **disponibilités** du conseiller (à revoir)            |
-
 ## 📂 Gestion des Documents (**Incomplet**)
 Gestion des documents associés au profil utilisateur.  
 
@@ -77,6 +67,17 @@ Gestion des documents associés au profil utilisateur.
 | **POST**   | `/profile/documents`     | 📤 Ajouter un nouveau document au profil utilisateur               |
 | **PATCH**  | `/profile/documents/:id` | ✏️ Modifier un document spécifique du profil utilisateur           |
 | **DELETE** | `/profile/documents/:id` | 🗑️ Supprimer un document spécifique du profil utilisateur          |
+
+## 🗓️ Gestion des Planning
+Gestion des calendriers et des évènements  
+Ces derniers sont actuellement des listes de rendez-vous (WIP)
+
+| Méthode    | Route                          | Description                                                                     |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------- |
+| **POST**   | `/planning`                    | 📅 Créez un nouveau **rendez-vous** (à déplacer dans le module des rendez-vous) |
+| **GET**    | `/planning/registration`       | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures  |
+| **GET**    | `/planning/advisor/:advisorId` | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller      |
+| **GET**    | `/planning/free-appointments`  | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                 |
 
 ## 🗓 Gestion des Rendez-vous (**Inexistant**)
 Prise de rendez-vous entre utilisateurs et conseillers

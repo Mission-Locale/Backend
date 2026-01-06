@@ -1,15 +1,18 @@
 import { Router } from "express";
 import MicrosoftService from "../repositories/MicrosoftService.js";
+import AppointmentRepository from "../repositories/AppointmentRepository.js";
 
-const microsoft = MicrosoftService;
 const planningRouter = Router()
+  .post("/planning", async (req, res) => {
+    return res.json(AppointmentRepository.create(req.body));
+  })
   .get("/planning/registration", async (req, res) => {
-    return res.json(microsoft.getRegistrationEvents());
+    return res.json(AppointmentRepository.getAll(null, undefined, Date.now()));
   })
-  .get("/planning/advisor/:mail", async (req, res) => {
-    return res.json(microsoft.getAdvisorEvents(req.params.mail));
+  .get("/planning/advisor/:advisorId", async (req, res) => {
+    return res.json(AppointmentRepository.getAll(req.params.advisorId));
   })
-  .get("/planning/free-appointments/:mail", async (req, res) => {
+  .get("/planning/free-appointments", async (req, res) => {
     const { start, end, duration } = req.query;
     if (!start || !end || !duration) {
       return res.status(400).json({ error: "Missing parameters." });
@@ -18,8 +21,7 @@ const planningRouter = Router()
     try {
       const startDate = new Date(start);
       const endDate = new Date(end);
-      const response = await microsoft.getAdvisorSchedule(
-        req.params.mail,
+      const response = await MicrosoftService.getRegistrationSchedule(
         startDate,
         endDate,
         duration

@@ -2,6 +2,7 @@ import "isomorphic-fetch";
 import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
+import { addMinutes, isBefore } from "date-fns";
 
 function mapToCalendarEvent(microsoftEvent) {
   return {
@@ -10,6 +11,7 @@ function mapToCalendarEvent(microsoftEvent) {
     start: microsoftEvent.start.dateTime,
     end: microsoftEvent.end.dateTime,
     title: microsoftEvent.subject,
+    color: "purple",
   };
 }
 class MicrosoftService {
@@ -37,9 +39,34 @@ class MicrosoftService {
     this.client = Client.initWithMiddleware({ authProvider, fetchOptions });
   }
 
+  async addAppointment(appointment) {
+    const jobSeeker = appointment.job_seeker.user;
+    let pathPrefix;
+    let subject;
+
+    if (appointment.advisor != null) {
+      pathPrefix = `/users/${appointment.advisor.user.email}`;
+      subject = `Rendez-vous avec ${jobSeeker.last_name} ${jobSeeker.first_name}`;
+    } else {
+      pathPrefix = "/me";
+      subject = `Rendez-vous d'inscription avec ${jobSeeker.last_name} ${jobSeeker.first_name}`;
+    }
+
+    return await this.client.api(pathPrefix + "/calendar/events").post({
+      subject: subject,
+      start: {
+        dateTime: appointment.startTime,
+      },
+      end: {
+        dateTime: addMinutes(appointment.startTime, appointment.duration),
+      },
+      id: appointment.id,
+    });
+  }
+
   async getRegistrationEvents() {
     return await this.client
-      .api(`/users/${this.microsoftAccount}/calendars/events`)
+      .api("/me/calendars/events")
       .top(30)
       .get()
       .map(mapToCalendarEvent);
@@ -53,21 +80,19 @@ class MicrosoftService {
       .map(mapToCalendarEvent);
   }
 
-  async getAdvisorSchedule(advisorEmail, start, end, duration = 60) {
-    return await this.client
-      .api(`/users/${advisorEmail}/calendars/getSchedule`)
-      .post({
-        schedules: [advisorEmail],
-        startTime: {
-          dateTime: start.toISOString(),
-          timeZone: "Europe/Paris",
-        },
-        endTime: {
-          dateTime: end.toISOString(),
-          timeZone: "Europe/Paris",
-        },
-        availabilityViewInterval: duration,
-      });
+  async getRegistrationSchedule(start, end, duration = 60) {
+    return await this.client.api(`/me/calendars/getSchedule`).post({
+      schedules: [this.microsoftAccount],
+      startTime: {
+        dateTime: start.toISOString(),
+        timeZone: "Europe/Paris",
+      },
+      endTime: {
+        dateTime: end.toISOString(),
+        timeZone: "Europe/Paris",
+      },
+      availabilityViewInterval: duration,
+    });
   }
 }
 
