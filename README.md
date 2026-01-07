@@ -72,23 +72,25 @@ Gestion des documents associés au profil utilisateur.
 Gestion des calendriers et des évènements  
 Ces derniers sont actuellement des listes de rendez-vous (WIP)
 
-| Méthode    | Route                          | Description                                                                     |
-| ---------- | ------------------------------ | ------------------------------------------------------------------------------- |
-| **POST**   | `/planning`                    | 📅 Créez un nouveau **rendez-vous** (à déplacer dans le module des rendez-vous) |
-| **GET**    | `/planning/registration`       | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures  |
-| **GET**    | `/planning/advisor/:advisorId` | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller      |
-| **GET**    | `/planning/free-appointments`  | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                 |
+| Méthode    | Route                               | Description                                                                        |
+| ---------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
+| **GET**    | `/planning/registration`            | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures     |
+| **GET**    | `/planning/advisor/:advisorId`      | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller         |
+| **GET**    | `/planning/job-seeker/:jobSeekerId` | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du demandeur d'emploi |
+| **GET**    | `/planning/free-appointments`       | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                    |
 
-## 🗓 Gestion des Rendez-vous (**Inexistant**)
-Prise de rendez-vous entre utilisateurs et conseillers
+## 🗓 Gestion des Rendez-vous
+Gestion de rendez-vous entre demandeurs et conseillers
 
-| Méthode    | Route               | Description                                                                                            |
-| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------ |
-| **POST**   | `/appointments`     | 📅 L'utilisateur prend un **rendez-vous** avec un conseillé                                            |
-| **GET**    | `/appointments`     | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur (ou tous les rendez-vous si administrateur) |
-| **GET**    | `/appointments/:id` | 🔎 Récupérer un **rendez-vous** spécifique par ID                                                      |
-| **PATCH**  | `/appointments/:id` | ✏️ Modifier un **rendez-vous**                                                                         |
-| **DELETE** | `/appointments/:id` | ❌ Annuler ou supprimer un **rendez-vous**                                                             |
+| Méthode    | Route                        | Description                                                                    |
+| ---------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| **POST**   | `/appointments`              | 📅 Enregistre un nouveau **rendez-vous**                                       |
+| **GET**    | `/appointments`              | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                     |
+| **GET**    | `/appointments/:id`          | 🔎 Récupérer un **rendez-vous** spécifique par ID                              |
+| **PATCH**  | `/appointments/:id`          | ✏️ Modifier un **rendez-vous** (Not done yet)                                  |
+| **DELETE** | `/appointments/:id`          | ❌ Annuler ou supprimer un **rendez-vous** (Not done yet)                      |
+| **GET**    | `/appointments/registration` | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures |
+
 
 ## 💬 Gestion des Messages (**Inexistant**)
 Envoi de messages entre utilisateur et conseillé  

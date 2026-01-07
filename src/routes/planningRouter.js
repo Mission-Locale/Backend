@@ -1,16 +1,23 @@
 import { Router } from "express";
 import MicrosoftService from "../repositories/MicrosoftService.js";
 import AppointmentRepository from "../repositories/AppointmentRepository.js";
+import authGuard from "../middlewares/authguard.js";
 
 const planningRouter = Router()
-  .post("/planning", async (req, res) => {
-    return res.json(AppointmentRepository.create(req.body));
-  })
+  .use(authGuard)
   .get("/planning/registration", async (req, res) => {
+    // TODO map to calendar events ?
     return res.json(AppointmentRepository.getAll(null, undefined, Date.now()));
   })
   .get("/planning/advisor/:advisorId", async (req, res) => {
+    // TODO get workshops and map to calendar events
     return res.json(AppointmentRepository.getAll(req.params.advisorId));
+  })
+  .get("/planning/job-seeker/:jobSeeker", async (req, res) => {
+    // TODO get workshops and map to calendar events
+    return res.json(
+      AppointmentRepository.getAll(undefined, req.params.jobSeeker)
+    );
   })
   .get("/planning/free-appointments", async (req, res) => {
     const { start, end, duration } = req.query;

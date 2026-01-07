@@ -6,6 +6,7 @@ import helmet from "helmet";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
 import articleRouter from "./routes/articleRouter.js";
+import appointmentRouter from "./routes/appointmentRouter.js";
 import planningRouter from "./routes/planningRouter.js";
 import cookieParser from "cookie-parser";
 import profileRouter from "./routes/profileRouter.js";
@@ -48,6 +49,7 @@ const app = express()
   .use(profileRouter)
   .use(articleRouter)
   .use(workshopRouter)
+  .use(appointmentRouter)
   .use(planningRouter)
   .use(tagRouter)
   .use((_, res) =>

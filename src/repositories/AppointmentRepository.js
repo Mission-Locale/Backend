@@ -36,15 +36,31 @@ class AppointmentRepository {
   }
 
   async update(appointementId, newState, advisorId = undefined) {
-    await database.appointment.update({
-      where: {
-        id: appointementId,
-      },
-      data: {
-        state: newState,
-        advisor_id: advisorId,
-      },
-    });
+    try {
+      await database.appointment.update({
+        where: {
+          id: appointementId,
+        },
+        data: {
+          state: newState,
+          advisor_id: advisorId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async get(appointementId) {
+    try {
+      return await database.appointment.findUnique({
+        where: { appointment_id: appointementId },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
   async getAll(
