@@ -30,110 +30,112 @@ Si vous avez besoin de ré-initialiser entièrement la base de donnée en enviro
 ## 👥 Utilisateurs
 CRUD pour la gestion des utilisateurs depuis un compte **admin**.
 
-| Méthode    | Route        | Description                                                      |
-| ---------- | ------------ | ---------------------------------------------------------------- |
-| **GET**    | `/users`     | 🔍 Récupérer la liste des utilisateurs _(filtrage & pagination)_ |
-| **GET**    | `/users/:id` | 🔎 Récupérer un utilisateur par son **ID**                       |
-| **PATCH**  | `/users/:id` | ✏️ Modifier un utilisateur                                       |
-| **DELETE** | `/users/:id` | ❌ Supprimer un utilisateur                                      |
+| Méthode    | Route        | Auth  | Description                                                      |
+| ---------- | ------------ | ----- | ---------------------------------------------------------------- |
+| **GET**    | `/users`     | Admin | 🔍 Récupérer la liste des utilisateurs _(filtrage & pagination)_ |
+| **GET**    | `/users/me`  | Yes   | 🔎 Récupére l'utilisateur connecté (Not done yet)                |
+| **GET**    | `/users/:id` | Admin | 🔎 Récupérer un utilisateur par son **ID**                       |
+| **PATCH**  | `/users/:id` | Admin | ✏️ Modifier un utilisateur                                       |
+| **DELETE** | `/users/:id` | Admin | ❌ Supprimer un utilisateur                                      |
 
 ## 🔐 Authentification
 Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sécurité...)_.
 
-| Méthode  | Route                | Description                                                    |
-| -------- | -------------------- | -------------------------------------------------------------- |
-| **POST** | `/auth/register`     | 📝 **Inscription** d’un nouvel utilisateur                     |
-| **POST** | `/auth/login`        | 🔑 **Connexion** & récupération du token **JWT**               |
-| **POST** | `/auth/logout`       | 🚪 **Déconnexion** de l'utilisateur                            |
-| **GET**  | `/auth/force-logout` | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils** |
-| **GET**  | `/auth/refresh`      | ♻️ **Rafraîchissement** du token **JWT**                       |
+| Méthode  | Route                | Auth | Description                                                    |
+| -------- | -------------------- | ---- | -------------------------------------------------------------- |
+| **POST** | `/auth/register`     | No   | 📝 **Inscription** d’un nouvel utilisateur                     |
+| **POST** | `/auth/login`        | No   | 🔑 **Connexion** & récupération du token **JWT**               |
+| **POST** | `/auth/logout`       | Yes  | 🚪 **Déconnexion** de l'utilisateur                            |
+| **GET**  | `/auth/force-logout` | Yes  | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils** |
+| **GET**  | `/auth/refresh`      | No   | ♻️ **Rafraîchissement** du token **JWT**                       |
 
 ## 🙋‍♂ Profil
 
 Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès admin)_.
 
-| Méthode    | Route      | Description                        |
-| ---------- | ---------- | ---------------------------------- |
-| **GET**    | `/profile` | 🆔 Récupérer **son propre profil** |
-| **PATCH**  | `/profile` | ✍️ Modifier **son profil**         |
-| ~~**DELETE**~~ | ~~`/profile`~~ | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
+| Méthode        | Route          | Auth | Description                                         |
+| -------------- | -------------- | ---- | --------------------------------------------------- |
+| **GET**        | `/profile`     | Yes  | 🆔 Récupérer **son propre profil**                  |
+| **PATCH**      | `/profile`     | Yes  | ✍️ Modifier **son profil**                          |
+| ~~**DELETE**~~ | ~~`/profile`~~ | Yes  | ~~🗑️ Supprimer **son propre compte**~~ (Inexistant) |
 
 ## 📂 Gestion des Documents (**Incomplet**)
 Gestion des documents associés au profil utilisateur.  
 
-| Méthode    | Route                    | Description                                                        |
-| ---------- | ------------------------ | ------------------------------------------------------------------ |
-| **GET**    | `/profile/documents`     | 📄 Récupérer la liste des documents associés au profil utilisateur |
-| **POST**   | `/profile/documents`     | 📤 Ajouter un nouveau document au profil utilisateur               |
-| **PATCH**  | `/profile/documents/:id` | ✏️ Modifier un document spécifique du profil utilisateur           |
-| **DELETE** | `/profile/documents/:id` | 🗑️ Supprimer un document spécifique du profil utilisateur          |
+| Méthode    | Route                    | Auth | Description                                                        |
+| ---------- | ------------------------ | ---- | ------------------------------------------------------------------ |
+| **GET**    | `/profile/documents`     | Yes  | 📄 Récupérer la liste des documents associés au profil utilisateur |
+| **POST**   | `/profile/documents`     | Yes  | 📤 Ajouter un nouveau document au profil utilisateur               |
+| **PATCH**  | `/profile/documents/:id` | Yes  | ✏️ Modifier un document spécifique du profil utilisateur           |
+| **DELETE** | `/profile/documents/:id` | Yes  | 🗑️ Supprimer un document spécifique du profil utilisateur          |
 
 ## 🗓️ Gestion des Planning
 Gestion des calendriers et des évènements  
 Ces derniers sont actuellement des listes de rendez-vous (WIP)
 
-| Méthode    | Route                               | Description                                                                        |
-| ---------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
-| **GET**    | `/planning/registration`            | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures     |
-| **GET**    | `/planning/advisor/:advisorId`      | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller         |
-| **GET**    | `/planning/job-seeker/:jobSeekerId` | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du demandeur d'emploi |
-| **GET**    | `/planning/free-appointments`       | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                    |
+| Méthode    | Route                               | Auth | Description                                                                        |
+| ---------- | ----------------------------------- | ---- | ---------------------------------------------------------------------------------- |
+| **GET**    | `/planning/registration`            | Yes  | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures     |
+| **GET**    | `/planning/me`                      | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** de l'utilisateur connecté (l'adminstrateur récupèrera le planning d'inscription) |
+| **GET**    | `/planning/advisor/:advisorId`      | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller         |
+| **GET**    | `/planning/job-seeker/:jobSeekerId` | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du demandeur d'emploi |
+| **GET**    | `/planning/free-appointments`       | No   | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                    |
 
 ## 🗓 Gestion des Rendez-vous
 Gestion de rendez-vous entre demandeurs et conseillers
 
-| Méthode    | Route                        | Description                                                                    |
-| ---------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| **POST**   | `/appointments`              | 📅 Enregistre un nouveau **rendez-vous**                                       |
-| **GET**    | `/appointments`              | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                     |
-| **GET**    | `/appointments/:id`          | 🔎 Récupérer un **rendez-vous** spécifique par ID                              |
-| **PATCH**  | `/appointments/:id`          | ✏️ Modifier un **rendez-vous** (Not done yet)                                  |
-| **DELETE** | `/appointments/:id`          | ❌ Annuler ou supprimer un **rendez-vous** (Not done yet)                      |
-| **GET**    | `/appointments/registration` | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures |
+| Méthode    | Route                        | Auth | Description                                                                    |
+| ---------- | ---------------------------- | ---- | ------------------------------------------------------------------------------ |
+| **POST**   | `/appointments`              | Yes  | 📅 Enregistre un nouveau **rendez-vous**                                       |
+| **GET**    | `/appointments`              | Yes  | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                     |
+| **GET**    | `/appointments/:id`          | Yes  | 🔎 Récupérer un **rendez-vous** spécifique par ID                              |
+| **PATCH**  | `/appointments/:id`          | Yes  | ✏️ Modifier un **rendez-vous** (Not done yet)                                  |
+| **DELETE** | `/appointments/:id`          | Yes  | ❌ Annuler ou supprimer un **rendez-vous** (Not done yet)                      |
+| **GET**    | `/appointments/registration` | Yes  | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures |
 
 
 ## 💬 Gestion des Messages (**Inexistant**)
 Envoi de messages entre utilisateur et conseillé  
 
-| Méthode    | Route           | Description                                                                     |
-| ---------- | --------------- | ------------------------------------------------------------------------------- |
-| **POST**   | `/messages`     | 📨 L'utilisateur envoie un **message** à son conseillé                          |
-| **GET**    | `/messages`     | 🔍 Récupérer l'historique des **messages** entre l'utilisateur et son conseillé |
-| **GET**    | `/messages/:id` | 🔎 Récupérer un **message** spécifique par ID                                   |
-| **DELETE** | `/messages/:id` | 🗑️ Supprimer un **message** spécifique                                          |
+| Méthode    | Route           | Auth | Description                                                                     |
+| ---------- | --------------- | ---- | ------------------------------------------------------------------------------- |
+| **POST**   | `/messages`     |      | 📨 L'utilisateur envoie un **message** à son conseillé                          |
+| **GET**    | `/messages`     |      | 🔍 Récupérer l'historique des **messages** entre l'utilisateur et son conseillé |
+| **GET**    | `/messages/:id` |      | 🔎 Récupérer un **message** spécifique par ID                                   |
+| **DELETE** | `/messages/:id` |      | 🗑️ Supprimer un **message** spécifique                                          |
 
 ## 🛠 Gestion des Ateliers et Events
 
 ### Gestion des Ateliers (événements récurrents)
 
-| Méthode    | Route                   | Description                                          |
-| ---------- | ----------------------- | ---------------------------------------------------- |
-| **POST**   | `/workshops`            | 📝 Créer un nouvel **atelier** (événement récurrent) |
-| **GET**    | `/workshops`            | 🔍 Récupérer la liste de tous les **atelier**        |
-| **GET**    | `/workshops/detail/:id` | 🔎 Récupérer un **atelier** spécifique par ID        |
-| **PATCH**  | `/workshops/:id`        | ✏️ Modifier un **atelier**                           |
-| **DELETE** | `/workshops/:id`        | 🗑️ Supprimer un **atelier**                          |
+| Méthode    | Route                   | Auth | Description                                          |
+| ---------- | ----------------------- | ---- | ---------------------------------------------------- |
+| **POST**   | `/workshops`            |      | 📝 Créer un nouvel **atelier** (événement récurrent) |
+| **GET**    | `/workshops`            |      | 🔍 Récupérer la liste de tous les **atelier**        |
+| **GET**    | `/workshops/detail/:id` |      | 🔎 Récupérer un **atelier** spécifique par ID        |
+| **PATCH**  | `/workshops/:id`        |      | ✏️ Modifier un **atelier**                           |
+| **DELETE** | `/workshops/:id`        |      | 🗑️ Supprimer un **atelier**                          |
 
 ---
 
 ### Gestion des Events (instanciations des ateliers) (**Inexistant**)
 
-| Méthode    | Route         | Description                                           |
-| ---------- | ------------- | ----------------------------------------------------- |
-| **POST**   | `/events`     | 📝 Créer un **événement** spécifique d'un **atelier** |
-| **GET**    | `/events`     | 🔍 Récupérer la liste de tous les **événements**      |
-| **GET**    | `/events/:id` | 🔎 Récupérer un **événement** spécifique par ID       |
-| **PATCH**  | `/events/:id` | ✏️ Modifier un **événement**                          |
-| **DELETE** | `/events/:id` | 🗑️ Supprimer un **événement**                         |
+| Méthode    | Route         | Auth | Description                                           |
+| ---------- | ------------- | ---- | ----------------------------------------------------- |
+| **POST**   | `/events`     |      | 📝 Créer un **événement** spécifique d'un **atelier** |
+| **GET**    | `/events`     |      | 🔍 Récupérer la liste de tous les **événements**      |
+| **GET**    | `/events/:id` |      | 🔎 Récupérer un **événement** spécifique par ID       |
+| **PATCH**  | `/events/:id` |      | ✏️ Modifier un **événement**                          |
+| **DELETE** | `/events/:id` |      | 🗑️ Supprimer un **événement**                         |
 
 ---
 
 ### Gestion des Inscriptions aux Events (**Inexistant**)
 
-| Méthode    | Route                       | Description                                                        |
-| ---------- | --------------------------- | ------------------------------------------------------------------ |
-| **POST**   | `/events/:id/queue`         | 📝 S'inscrire à un **événement** spécifique                        |
-| **GET**    | `/events/:id/queue`         | 🔍 Récupérer la liste des utilisateurs inscrits à un **événement** |
-| **DELETE** | `/events/:id/queue/:userId` | ❌ Se désinscrire d'un **événement** spécifique                    |
+| Méthode    | Route                       | Auth | Description                                                        |
+| ---------- | --------------------------- | ---- | ------------------------------------------------------------------ |
+| **POST**   | `/events/:id/queue`         |      | 📝 S'inscrire à un **événement** spécifique                        |
+| **GET**    | `/events/:id/queue`         |      | 🔍 Récupérer la liste des utilisateurs inscrits à un **événement** |
+| **DELETE** | `/events/:id/queue/:userId` |      | ❌ Se désinscrire d'un **événement** spécifique                    |
 
 **(TODO: Ajouter les chemins des articles)**
