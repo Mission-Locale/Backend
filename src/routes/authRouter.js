@@ -66,7 +66,7 @@ const authRouter = Router()
           expires: new Date(Date.now() + expiration),
           ...cookieOptions,
         })
-        .json({ token: accessToken, role: user.role });
+        .json({ token: accessToken, role: user.roleType });
     } catch (err) {
       res.status(400).json({ error: err });
     }
