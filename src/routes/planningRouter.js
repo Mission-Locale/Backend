@@ -6,24 +6,26 @@ import authGuard from "../middlewares/authguard.js";
 const planningRouter = Router()
   .get("/planning/registration", authGuard, async (req, res) => {
     // TODO map to calendar events ?
-    return res.json(AppointmentRepository.getAll(null, undefined, Date.now()));
+    return res.json(
+      await AppointmentRepository.getAll(null, undefined, new Date())
+    );
   })
   .get("/planning/me", authGuard, async (req, res) => {
     // TODO get workshops and map to calendar events
     switch (req.user.roleType) {
       case "JOB_SEEKER":
         return res.json(
-          AppointmentRepository.getAll(
+          await AppointmentRepository.getAll(
             undefined,
             req.user.jobSeeker.job_seeker_id
           )
         );
       case "ADVISOR":
         return res.json(
-          AppointmentRepository.getAll(req.user.advisor.advisor_id)
+          await AppointmentRepository.getAll(req.user.advisor.advisor_id)
         );
       case "ADMINISTRATOR":
-        return res.json(AppointmentRepository.getAll(null, undefined));
+        return res.json(await AppointmentRepository.getAll(null, undefined));
       default:
         return res
           .status(403)
@@ -32,12 +34,12 @@ const planningRouter = Router()
   })
   .get("/planning/advisor/:advisorId", authGuard, async (req, res) => {
     // TODO get workshops and map to calendar events
-    return res.json(AppointmentRepository.getAll(req.params.advisorId));
+    return res.json(await AppointmentRepository.getAll(req.params.advisorId));
   })
   .get("/planning/job-seeker/:jobSeeker", authGuard, async (req, res) => {
     // TODO get workshops and map to calendar events
     return res.json(
-      AppointmentRepository.getAll(undefined, req.params.jobSeeker)
+      await AppointmentRepository.getAll(undefined, req.params.jobSeeker)
     );
   })
   .get("/planning/free-appointments", async (req, res) => {

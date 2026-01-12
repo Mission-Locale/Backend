@@ -28,7 +28,7 @@ En cas de **modification des modèles prisma** executez: ```npm run migrate```.
 Si vous avez besoin de ré-initialiser entièrement la base de donnée en environnement de développement après un reset des migrations, veuillez utilisez la commande ```npm run migrate reset```
 
 ## 👥 Utilisateurs
-CRUD pour la gestion des utilisateurs depuis un compte **admin**.
+Gestion des **utilisateurs**
 
 | Méthode    | Route        | Auth  | Description                                                      |
 | ---------- | ------------ | ----- | ---------------------------------------------------------------- |

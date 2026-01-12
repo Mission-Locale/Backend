@@ -1,11 +1,12 @@
 import database from "../databases/database.js";
 import microsoftService from "./MicrosoftService.js";
+import { isBefore, addMinutes } from "date-fns";
 
 class AppointmentRepository {
   /* Create Appointment */
   async create(data) {
     const status = isBefore(
-      addMinutes(appointment.startTime, appointment.duration),
+      addMinutes(data.startTime, data.duration),
       Date.now()
     )
       ? "MISSED"
@@ -69,7 +70,7 @@ class AppointmentRepository {
     from = undefined,
     to = undefined
   ) {
-    if (advisorId == undefined && jobSeekerId == undefined) {
+    if (advisorId === undefined && jobSeekerId === undefined) {
       throw {
         error: "The Advisor or the JobSeeker need to be defined or null",
       };
