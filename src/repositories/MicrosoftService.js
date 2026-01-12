@@ -3,17 +3,6 @@ import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
 import { addMinutes, isBefore } from "date-fns";
-
-function mapToCalendarEvent(microsoftEvent) {
-  return {
-    id: microsoftEvent.id,
-    timeZone: microsoftEvent.start.timeZone,
-    start: microsoftEvent.start.dateTime,
-    end: microsoftEvent.end.dateTime,
-    title: microsoftEvent.subject,
-    color: "purple",
-  };
-}
 class MicrosoftService {
   client;
   microsoftAccount = process.env.MICROSOFT_ACCOUNT;
@@ -65,19 +54,14 @@ class MicrosoftService {
   }
 
   async getRegistrationEvents() {
-    return await this.client
-      .api("/me/calendars/events")
-      .top(30)
-      .get()
-      .map(mapToCalendarEvent);
+    return await this.client.api("/me/calendars/events").top(30).get();
   }
 
   async getAdvisorEvents(advisorEmail) {
     return await this.client
       .api(`/users/${advisorEmail}/calendars/events`)
       .top(30)
-      .get()
-      .map(mapToCalendarEvent);
+      .get();
   }
 
   async getRegistrationSchedule(start, end, duration = 60) {
