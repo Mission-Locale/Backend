@@ -71,27 +71,28 @@ Gestion des documents associés au profil utilisateur.
 
 ## 🗓️ Gestion des Planning
 Gestion des calendriers et des évènements  
-Ces derniers sont actuellement des listes de rendez-vous (WIP)
+Ces derniers renvoie des évènement formatés pour full calendar
 
-| Méthode    | Route                               | Auth | Description                                                                        |
-| ---------- | ----------------------------------- | ---- | ---------------------------------------------------------------------------------- |
-| **GET**    | `/planning/registration`            | Yes  | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures     |
-| **GET**    | `/planning/me`                      | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** de l'utilisateur connecté (l'adminstrateur récupèrera le planning d'inscription) |
-| **GET**    | `/planning/advisor/:advisorId`      | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du conseiller         |
-| **GET**    | `/planning/job-seeker/:jobSeekerId` | Yes  | 🔍 Récupérer le planning des **rendez-vous ~~et ateliers~~** du demandeur d'emploi |
-| **GET**    | `/planning/free-appointments`       | No   | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                    |
+| Méthode    | Route                               | Auth  | Description                                                                        |
+| ---------- | ----------------------------------- | ----- | ---------------------------------------------------------------------------------- |
+| **GET**    | `/planning/registration`            | Admin | 🔍 Récupère le planning des **rendez-vous d'inscription** en cours et futures      |
+| **GET**    | `/planning/me`                      | Yes   | 🔍 Récupérer le planning des **rendez-vous et ateliers** de l'utilisateur connecté (l'adminstrateur récupèrera le planning d'inscription) |
+| **GET**    | `/planning/advisor/:advisorId`      | Admin | 🔍 Récupérer le planning des **rendez-vous et ateliers** du conseiller             |
+| **GET**    | `/planning/job-seeker/:jobSeekerId` | Admin | 🔍 Récupérer le planning des **rendez-vous et ateliers** du demandeur d'emploi     |
+| **GET**    | `/planning/free-appointments`       | No    | 🔍 Récupérer les **disponibilités** du calendrier d'inscription                    |
 
 ## 🗓 Gestion des Rendez-vous
 Gestion de rendez-vous entre demandeurs et conseillers
 
-| Méthode    | Route                        | Auth | Description                                                                    |
-| ---------- | ---------------------------- | ---- | ------------------------------------------------------------------------------ |
-| **POST**   | `/appointments`              | Yes  | 📅 Enregistre un nouveau **rendez-vous**                                       |
-| **GET**    | `/appointments`              | Yes  | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                     |
-| **GET**    | `/appointments/:id`          | Yes  | 🔎 Récupérer un **rendez-vous** spécifique par ID                              |
-| **PATCH**  | `/appointments/:id`          | Yes  | ✏️ Modifier un **rendez-vous** (Not done yet)                                  |
-| **DELETE** | `/appointments/:id`          | Yes  | ❌ Annuler ou supprimer un **rendez-vous** (Not done yet)                      |
-| **GET**    | `/appointments/registration` | Yes  | 🔍 Récupère la liste des **rendez-vous d'inscription** ~~en cours~~ et futures |
+| Méthode    | Route                        | Auth                | Description                                                                |
+| ---------- | ---------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| **POST**   | `/appointments`              | Advisor, Admin      | 📅 Enregistre un nouveau **rendez-vous**                                   |
+| **GET**    | `/appointments`              | Advisor, Job Seeker | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                 |
+| **GET**    | `/appointments/:id`          | Yes                 | 🔎 Récupérer un **rendez-vous** spécifique par ID                          |
+| **PATCH**  | `/appointments/:id`          | Advisor, Admin      | ✏️ Modifier un **rendez-vous** (Conseiller et État du rendez-vous)         |
+| **DELETE** | `/appointments/:id`          | Advisor, Admin      | ❌ Annuler ou supprimer un **rendez-vous**                                 |
+| **GET**    | `/appointments/registration` | Advisor, Admin      | 🔍 Récupère la liste des **rendez-vous d'inscription** en cours et futures |
+| **POST**   | `/appointments/registration` | No                  | 📅 Enregistre un nouveau **rendez-vous d'inscription**                     |
 
 
 ## 💬 Gestion des Messages (**Inexistant**)

@@ -40,7 +40,6 @@ class WorkshopRepository {
         where: { workshop_id: id },
         include: {
           recurrences: true,
-          tag: true,
         },
       });
     } catch (err) {
@@ -52,17 +51,31 @@ class WorkshopRepository {
   /*
         
     */
-  async findMany(filters = {}) {
+  async findMany(
+    advisorId = undefined,
+    jobSeekerId = undefined,
+    from = undefined,
+    to = undefined
+  ) {
     try {
       return await this.db.workshopRecurrence.findMany({
         where: {
           startTime: {
-            gte: filters.start ? new Date(filters.start) : undefined,
-            lte: filters.end ? new Date(filters.end) : undefined,
+            gte: from,
+            lte: to,
+          },
+          registrations: {
+            job_seeker_id: jobSeekerId,
+          },
+          animators: {
+            advisor_id: advisorId,
           },
         },
         include: {
           workshop: true,
+          registrations: true,
+          animators: true,
+          coAnimators: true,
         },
       });
     } catch (err) {

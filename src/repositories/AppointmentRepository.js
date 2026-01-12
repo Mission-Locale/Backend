@@ -27,7 +27,12 @@ class AppointmentRepository {
         },
       });
 
-      await microsoftService.addAppointment(appointment);
+      try {
+        await microsoftService.addAppointment(appointment);
+      } catch (err) {
+        console.error(err) //TODO: logs/notify microsoft errors
+      }
+      
 
       return appointment;
     } catch (err) {
@@ -38,13 +43,26 @@ class AppointmentRepository {
 
   async update(appointementId, newState, advisorId = undefined) {
     try {
-      await database.appointment.update({
+      return await database.appointment.update({
         where: {
           id: appointementId,
         },
         data: {
           state: newState,
           advisor_id: advisorId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async delete(appointementId) {
+    try {
+      await database.appointment.delete({
+        where: {
+          id: appointementId,
         },
       });
     } catch (err) {
@@ -81,7 +99,7 @@ class AppointmentRepository {
         where: {
           advisor_id: advisorId,
           job_seeker_id: jobSeekerId,
-          startTime: { gte: from, lt: to },
+          startTime: { lt: to, gte: from }, // TODO: rework model, remove duration and add endTime to improve filtering
         },
       });
     } catch (err) {

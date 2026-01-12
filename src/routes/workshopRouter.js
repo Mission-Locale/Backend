@@ -7,7 +7,7 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      const recurrences = await workshopRepository.findMany(req.query);
+      const recurrences = await workshopRepository.findMany(...req.query);
 
       const parsedRecurrences = recurrences.map((recurrence) => {
         return {
