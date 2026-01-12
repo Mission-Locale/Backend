@@ -12,9 +12,10 @@ Partie backend du projet de l'application web de la Mission Locale du Pays d'Aub
 - [👥 Utilisateurs](#-utilisateurs)
 - [🔐 Authentification](#-authentification)
 - [🙋‍♂️ Profil](#-profil)
-- [📂 Gestion des Documents](#-gestion-des-documents)
+- [📂 Gestion des Documents](#-gestion-des-documents-incomplet)
+- [🗓️ Gestion des Plannings](#-gestion-des-plannings)
 - [🗓 Gestion des Rendez-vous](#-gestion-des-rendez-vous)
-- [💬 Gestion des Messages](#-gestion-des-messages)
+- [💬 Gestion des Messages](#-gestion-des-messages-inexistant)
 - [🛠 Gestion des Ateliers et Events](#-gestion-des-ateliers-et-events)
 
 ## 🛠 Initialisation
@@ -50,7 +51,6 @@ Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sé
 | **GET**  | `/auth/refresh`      | No   | ♻️ **Rafraîchissement** du token **JWT**                       |
 
 ## 🙋‍♂ Profil
-
 Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès admin)_.
 
 | Méthode        | Route          | Auth | Description                                         |
@@ -69,7 +69,7 @@ Gestion des documents associés au profil utilisateur.
 | **PATCH**  | `/profile/documents/:id` | Yes  | ✏️ Modifier un document spécifique du profil utilisateur           |
 | **DELETE** | `/profile/documents/:id` | Yes  | 🗑️ Supprimer un document spécifique du profil utilisateur          |
 
-## 🗓️ Gestion des Planning
+## 🗓️ Gestion des Plannings
 Gestion des calendriers et des évènements  
 Ces derniers renvoie des évènement formatés pour full calendar
 
