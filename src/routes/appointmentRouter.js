@@ -5,7 +5,7 @@ import authGuard from "../middlewares/authguard.js";
 const appointmentRouter = Router()
   .post("/appointments", authGuard, async (req, res) => {
     const authorized = false;
-    switch (req.user.userType) {
+    switch (req.user.roleType) {
       case "ADVISOR":
         authorized = req.body.advisor_id == req.user.advisor_id;
         break;
