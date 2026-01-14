@@ -1,15 +1,16 @@
-import "dotenv/config"
-import express from "express"
-import cors from "cors"
+import "dotenv/config";
+import "express-async-errors";
+import express from "express";
+import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
 import articleRouter from "./routes/articleRouter.js";
-//import microsoftRouter from "./routes/microsoftRouter.js";
+import appointmentRouter from "./routes/appointmentRouter.js";
+import planningRouter from "./routes/planningRouter.js";
 import cookieParser from "cookie-parser";
 import profileRouter from "./routes/profileRouter.js";
-import tagRouter from "./routes/tagRouter.js";
 import workshopRouter from "./routes/workshopRouter.js";
 
 const port = process.env.PORT;
@@ -21,7 +22,6 @@ const app = express()
       credentials: true,
     })
   )
-
   .use(
     rateLimit({
       windowMs: 10 * 60 * 1000,
@@ -48,11 +48,15 @@ const app = express()
   .use(profileRouter)
   .use(articleRouter)
   .use(workshopRouter)
-  //.use(microsoftRouter)
-  .use(tagRouter)
+  .use(appointmentRouter)
+  .use(planningRouter)
   .use((_, res) =>
     setTimeout(() => res.status(404).json({ message: "Route not found" }), 3000)
   )
+  .use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).json(err);
+  })
   .listen(port, (err) => {
     if (err) return console.error(err);
     console.log(`Listen at port ${port}`);
