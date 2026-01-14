@@ -2,7 +2,7 @@ import "isomorphic-fetch";
 import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
-import { addMinutes, isBefore } from "date-fns";
+import { addMinutes } from "date-fns";
 class MicrosoftService {
   client;
   microsoftAccount = process.env.MICROSOFT_ACCOUNT;
@@ -37,7 +37,7 @@ class MicrosoftService {
       pathPrefix = `/users/${appointment.advisor.user.email}`;
       subject = `Rendez-vous avec ${jobSeeker.last_name} ${jobSeeker.first_name}`;
     } else {
-      pathPrefix = "/me";
+      pathPrefix = `/users/${this.microsoftAccount}`;
       subject = `Rendez-vous d'inscription avec ${jobSeeker.last_name} ${jobSeeker.first_name}`;
     }
 
@@ -54,7 +54,10 @@ class MicrosoftService {
   }
 
   async getRegistrationEvents() {
-    return await this.client.api("/me/calendars/events").top(30).get();
+    return await this.client
+      .api(`/users/${this.microsoftAccount}/calendars/events`)
+      .top(30)
+      .get();
   }
 
   async getAdvisorEvents(advisorEmail) {
@@ -65,18 +68,20 @@ class MicrosoftService {
   }
 
   async getRegistrationSchedule(start, end, duration = 60) {
-    return await this.client.api(`/me/calendars/getSchedule`).post({
-      schedules: [this.microsoftAccount],
-      startTime: {
-        dateTime: start.toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      endTime: {
-        dateTime: end.toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      availabilityViewInterval: duration,
-    });
+    return await this.client
+      .api(`/users/${this.microsoftAccount}/calendars/getSchedule`)
+      .post({
+        schedules: [this.microsoftAccount],
+        startTime: {
+          dateTime: start.toISOString(),
+          timeZone: "Europe/Paris",
+        },
+        endTime: {
+          dateTime: end.toISOString(),
+          timeZone: "Europe/Paris",
+        },
+        availabilityViewInterval: duration,
+      });
   }
 }
 
