@@ -69,16 +69,16 @@ class MicrosoftService {
 
   async getRegistrationSchedule(start, end, duration = 60) {
     return await this.client
-      .api(`/users/${this.microsoftAccount}/calendars/getSchedule`)
+      .api(`/users/${this.microsoftAccount}/calendar/getSchedule`)
       .post({
         schedules: [this.microsoftAccount],
         startTime: {
-          dateTime: start.toISOString(),
-          timeZone: "Europe/Paris",
+          dateTime: start,
+          timeZone: "UTC",
         },
         endTime: {
-          dateTime: end.toISOString(),
-          timeZone: "Europe/Paris",
+          dateTime: end,
+          timeZone: "UTC",
         },
         availabilityViewInterval: duration,
       });
