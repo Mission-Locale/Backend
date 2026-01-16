@@ -128,6 +128,8 @@ const planningRouter = Router()
       const view = response.value[0]?.availabilityView;
       if (!view)
         return res.status(500).json({ error: "No availability data." });
+      
+      const workingHours = response.value[0]?.workingHours;
 
       const availableSlots = [];
       for (let i = 0; i < view.length; i++) {
@@ -142,7 +144,7 @@ const planningRouter = Router()
         }
       }
 
-      return res.json({ data: availableSlots });
+      return res.json({ data: availableSlots, workingHours: workingHours });
     } catch (err) {
       console.error("Error in /free-appointment:", err);
       return res.status(500).json({ error: "Internal error" });
