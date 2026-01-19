@@ -10,8 +10,8 @@ const userRouter = Router()
     .get("/users", authguard, adminguard, async (req, res) => {
         try {
             const filters = await userFiltersValidator.validate(req.query, { stripUnknown: true });
-            const users = await userRepository.findMany(filters);
-            res.json(users);
+            const result = await userRepository.findMany(filters);
+            res.json(result);
         } catch (err) {
             res.status(400).json(err);
         }

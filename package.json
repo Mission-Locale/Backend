@@ -15,7 +15,8 @@
   "authors": [
     "Fabien",
     "Kevin",
-    "Sylvain"
+    "Sylvain",
+    "Mael"
   ],
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
