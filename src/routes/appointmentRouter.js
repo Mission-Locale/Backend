@@ -17,7 +17,7 @@ const appointmentRouter = Router()
       return res.json(await AppointmentRepository.create(req.body));
     else {
       return res
-        .status(401)
+        .status(403)
         .json({ error: "Unauthorized to create this appointment" });
     }
   })
