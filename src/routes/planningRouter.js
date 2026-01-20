@@ -14,6 +14,10 @@ function mapAppointmentToCalendarEvent(appointment) {
     end: addMinutes(appointment.startTime, appointment.duration),
     title: "Rendez-vous", // TODO add names
     color: "blue",
+    extendedProps: {
+      type: "APPOINTMENT",
+      appointment: appointment,
+    },
   };
 }
 
@@ -25,6 +29,10 @@ function mapWorkshopReccurenceToCalendarEvent(workshopReccurence) {
     end: addMinutes(workshopIteration.startTime, workshopIteration.duration),
     title: workshopIteration.topic,
     color: "purple",
+    extendedProps: {
+      type: "WORKSHOP_RECURRENCE",
+      workshopReccurence: workshopReccurence,
+    },
   };
 }
 
@@ -128,7 +136,7 @@ const planningRouter = Router()
       const view = response.value[0]?.availabilityView;
       if (!view)
         return res.status(500).json({ error: "No availability data." });
-      
+
       const workingHours = response.value[0]?.workingHours;
 
       const availableSlots = [];
