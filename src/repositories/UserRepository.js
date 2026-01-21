@@ -1,4 +1,6 @@
 import database from "../databases/database.js";
+import TokenRepository from "./TokenRepository.js";
+import mailService from "./MailService.js";
 
 class UserRepository {
   db = database;
@@ -8,7 +10,7 @@ class UserRepository {
   async create(data) {
     try {
       const { profile_picture_path, ...userData } = data;
-      return await this.db.user.create({
+      const user = await this.db.user.create({
         data: {
           ...userData,
           ...(data.roleType === "JOB_SEEKER" && {
@@ -35,6 +37,27 @@ class UserRepository {
           administrator: true,
         },
       });
+
+      // Envoyer un email d'invitation si c'est un advisor
+      if (data.roleType === "ADVISOR") {
+        try {
+          const resetToken = await TokenRepository.generate(
+            user.user_id,
+            "RESET_TOKEN",
+            72 * 60 * 60 // 72 heures
+          );
+          await mailService.sendAdvisorInvitation(
+            user.email,
+            user.first_name,
+            user.last_name,
+            resetToken
+          );
+        } catch (emailErr) {
+          console.error("Erreur lors de l'envoi de l'email d'invitation:", emailErr);
+        }
+      }
+
+      return user;
     } catch (err) {
       console.error(err);
       throw err;
