@@ -94,8 +94,8 @@ class UserRepository {
             name
               ? {
                   OR: [
-                    { first_name: { contains: name } },
-                    { last_name: { contains: name } },
+                    { first_name: { contains: name.toLowerCase() } },
+                    { last_name: { contains: name.toLowerCase() } },
                   ],
                 }
               : undefined,
