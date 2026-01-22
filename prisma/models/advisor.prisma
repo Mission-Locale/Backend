@@ -4,7 +4,7 @@ model Advisor {
     user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
     user_id String @unique
 
-    profile_picture_path String
+    profile_picture_path String?
 
     animates           Animator[]
     appointments       Appointment[]       @relation("app_advisor")

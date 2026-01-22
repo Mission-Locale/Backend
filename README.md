@@ -42,13 +42,16 @@ Gestion des **utilisateurs**
 ## 🔐 Authentification
 Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sécurité...)_.
 
-| Méthode  | Route                | Auth | Description                                                    |
-| -------- | -------------------- | ---- | -------------------------------------------------------------- |
-| **POST** | `/auth/register`     | No   | 📝 **Inscription** d’un nouvel utilisateur                     |
-| **POST** | `/auth/login`        | No   | 🔑 **Connexion** & récupération du token **JWT**               |
-| **POST** | `/auth/logout`       | Yes  | 🚪 **Déconnexion** de l'utilisateur                            |
-| **GET**  | `/auth/force-logout` | Yes  | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils** |
-| **GET**  | `/auth/refresh`      | No   | ♻️ **Rafraîchissement** du token **JWT**                       |
+| Méthode   | Route                             | Auth | Description                                                            |
+| --------  | ----------------------------------| ---- | -----------------------------------------------------------------------|
+| **POST**  | `/auth/register`                  | No   | 📝 **Inscription** d’un nouvel utilisateur                             |
+| **POST**  | `/auth/login`                     | No   | 🔑 **Connexion** & récupération du token **JWT**                       |
+| **POST**  | `/auth/logout`                    | Yes  | 🚪 **Déconnexion** de l'utilisateur                                    |
+| **GET**   | `/auth/force-logout`              | Yes  | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils**         |
+| **GET**   | `/auth/refresh`                   | No   | ♻️ **Rafraîchissement** du token **JWT**                               |
+| **POST**  | `/auth/forgot-password`           | No   | 📨 **Envoi** un mail à l'utilisateur pour reinitialiser son mot de passe & créer le reset_token **JWT**      |
+| **POST**  | `/auth/reset-password`            | No   | ♻️ **Réinitialise** le mot de passe d'un utilisateur avec le reset_token **JWT** |
+| **POST**  | `/auth/verify-reset-token`        | No   | 🔎 **Vérification** du token de reset password **JWT**                 |
 
 ## 🙋‍♂ Profil
 Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès admin)_.

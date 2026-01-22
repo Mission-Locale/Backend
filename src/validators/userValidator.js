@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 
 const today = new Date();
-const minDate = new Date(today.getFullYear() - 25, today.getMonth(), today.getDate());
 
 export const registerValidator = yup.object({
   first_name: yup.string().required("Prénom requis"),
@@ -13,7 +12,6 @@ export const registerValidator = yup.object({
     .required("Téléphone requis"),
   birth_date: yup
     .date()
-    .min(minDate, "L'utilisateur ne doit pas avoir plus de 25 ans")
     .max(today, "La date de naissance ne peut pas être dans le futur")
     .required("Date de naissance requise"),
   password: yup
@@ -39,7 +37,6 @@ export const updateUserValidator = yup.object({
     .matches(/^\d{10}$/, "Le numéro de téléphone doit contenir 10 chiffres"),
   birth_date: yup
     .date()
-    .min(minDate, "L'utilisateur ne doit pas avoir plus de 25 ans")
     .max(today, "La date de naissance ne peut pas être dans le futur"),
 });
 
@@ -52,7 +49,6 @@ export const updateValidator = yup.object({
     .matches(/^\d{10}$/, "Le numéro de téléphone doit contenir 10 chiffres"),
   birth_date: yup
     .date()
-    .min(minDate, "L'utilisateur ne doit pas avoir plus de 25 ans")
     .max(today, "La date de naissance ne peut pas être dans le futur"),
   password: yup
     .string()
@@ -82,4 +78,23 @@ export const userFiltersValidator = yup.object({
   name: yup.string().trim(),
   roleType: yup.mixed().oneOf(["ADMINISTRATOR", "ADVISOR", "JOB_SEEKER"]).optional(),
   order: yup.string().oneOf(["asc", "desc"]).default("asc"),
+});
+
+export const resetPasswordRequestValidator = yup.object({
+  email: yup.string().email("Email invalide").required("Email requis"),
+});
+
+export const resetPasswordValidator = yup.object({
+  token: yup.string().required("Token requis"),
+  password: yup
+    .string()
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .matches(/[a-z]/, "Le mot de passe doit contenir une lettre minuscule")
+    .matches(/[A-Z]/, "Le mot de passe doit contenir une lettre majuscule")
+    .matches(/[0-9]/, "Le mot de passe doit contenir un chiffre")
+    .required("Mot de passe requis"),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password")], "Les mots de passe ne correspondent pas")
+    .required("Confirmation du mot de passe requise"),
 });
