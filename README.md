@@ -13,8 +13,9 @@ Partie backend du projet de l'application web de la Mission Locale du Pays d'Aub
 - [🔐 Authentification](#-authentification)
 - [🙋‍♂️ Profil](#-profil)
 - [📂 Gestion des Documents](#-gestion-des-documents-incomplet)
-- [🗓️ Gestion des Plannings](#-gestion-des-plannings)
+- [🗓️ Gestion des Plannings](#️-gestion-des-plannings)
 - [🗓 Gestion des Rendez-vous](#-gestion-des-rendez-vous)
+- [👤 Gestion des conseillers](#-gestion-des-conseillers)
 - [💬 Gestion des Messages](#-gestion-des-messages-inexistant)
 - [🛠 Gestion des Ateliers et Events](#-gestion-des-ateliers-et-events)
 
