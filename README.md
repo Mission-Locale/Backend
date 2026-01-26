@@ -31,27 +31,30 @@ Si vous avez besoin de ré-initialiser entièrement la base de donnée en enviro
 ## 👥 Utilisateurs
 Gestion des **utilisateurs**
 
-| Méthode    | Route        | Auth  | Description                                                      |
-| ---------- | ------------ | ----- | ---------------------------------------------------------------- |
-| **GET**    | `/users`     | Admin | 🔍 Récupérer la liste des utilisateurs _(filtrage & pagination)_ |
-| **GET**    | `/users/me`  | Yes   | 🔎 Récupére l'utilisateur connecté (Not done yet)                |
-| **GET**    | `/users/:id` | Admin | 🔎 Récupérer un utilisateur par son **ID**                       |
-| **PATCH**  | `/users/:id` | Admin | ✏️ Modifier un utilisateur                                       |
-| **DELETE** | `/users/:id` | Admin | ❌ Supprimer un utilisateur                                      |
+| Méthode    | Route                      | Auth           | Description                                                      |
+| ---------- | -------------------------- | -------------- | ---------------------------------------------------------------- |
+| **GET**    | `/users`                   | Admin          | 🔍 Récupérer la liste des utilisateurs _(filtrage & pagination)_ |
+| **GET**    | `/users/me`                | Yes            | 🔎 Récupére l'utilisateur connecté                               |
+| **GET**    | `/users/job-seeker/:id`    | Admin, Advisor | 🔎 Récupérer un demandeur d'emploi par son **ID** de rôle        |
+| **GET**    | `/users/advisor/:id`       | Admin          | 🔎 Récupérer un conseiller par son **ID** de rôle                |
+| **GET**    | `/users/administrator/:id` | Admin          | 🔎 Récupérer un administrateur par son **ID** de rôle            |
+| **GET**    | `/users/:id`               | Admin          | 🔎 Récupérer un utilisateur par son **ID**                       |
+| **PATCH**  | `/users/:id`               | Admin          | ✏️ Modifier un utilisateur                                       |
+| **DELETE** | `/users/:id`               | Admin          | ❌ Supprimer un utilisateur                                      |
 
 ## 🔐 Authentification
 Gestion de l'**authentification des utilisateurs** _(inscription, connexion, sécurité...)_.
 
-| Méthode   | Route                             | Auth | Description                                                            |
-| --------  | ----------------------------------| ---- | -----------------------------------------------------------------------|
-| **POST**  | `/auth/register`                  | No   | 📝 **Inscription** d’un nouvel utilisateur                             |
-| **POST**  | `/auth/login`                     | No   | 🔑 **Connexion** & récupération du token **JWT**                       |
-| **POST**  | `/auth/logout`                    | Yes  | 🚪 **Déconnexion** de l'utilisateur                                    |
-| **GET**   | `/auth/force-logout`              | Yes  | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils**         |
-| **GET**   | `/auth/refresh`                   | No   | ♻️ **Rafraîchissement** du token **JWT**                               |
-| **POST**  | `/auth/forgot-password`           | No   | 📨 **Envoi** un mail à l'utilisateur pour reinitialiser son mot de passe & créer le reset_token **JWT**      |
-| **POST**  | `/auth/reset-password`            | No   | ♻️ **Réinitialise** le mot de passe d'un utilisateur avec le reset_token **JWT** |
-| **POST**  | `/auth/verify-reset-token`        | No   | 🔎 **Vérification** du token de reset password **JWT**                 |
+| Méthode   | Route                             | Auth | Description                                                                                             |
+| --------  | ----------------------------------| ---- | --------------------------------------------------------------------------------------------------------|
+| **POST**  | `/auth/register`                  | No   | 📝 **Inscription** d’un nouvel utilisateur                                                              |
+| **POST**  | `/auth/login`                     | No   | 🔑 **Connexion** & récupération du token **JWT**                                                        |
+| **POST**  | `/auth/logout`                    | Yes  | 🚪 **Déconnexion** de l'utilisateur                                                                     |
+| **GET**   | `/auth/force-logout`              | Yes  | 🚪 **Déconnexion** de l'utilisateur sur **tous ses appareils**                                          |
+| **GET**   | `/auth/refresh`                   | No   | ♻️ **Rafraîchissement** du token **JWT**                                                                |
+| **POST**  | `/auth/forgot-password`           | No   | 📨 **Envoi** un mail à l'utilisateur pour reinitialiser son mot de passe & créer le reset_token **JWT** |
+| **POST**  | `/auth/reset-password`            | No   | ♻️ **Réinitialise** le mot de passe d'un utilisateur avec le reset_token **JWT**                        |
+| **POST**  | `/auth/verify-reset-token`        | No   | 🔎 **Vérification** du token de reset password **JWT**                                                  |
 
 ## 🙋‍♂ Profil
 Gestion du **profil utilisateur** _(actions personnelles, sans besoin d'accès admin)_.
@@ -69,8 +72,8 @@ Gestion des documents associés au profil utilisateur.
 | ---------- | ------------------------ | ---- | ------------------------------------------------------------------ |
 | **GET**    | `/profile/documents`     | Yes  | 📄 Récupérer la liste des documents associés au profil utilisateur |
 | **POST**   | `/profile/documents`     | Yes  | 📤 Ajouter un nouveau document au profil utilisateur               |
-| **PATCH**  | `/profile/documents/:id` | Yes  | ✏️ Modifier un document spécifique du profil utilisateur           |
-| **DELETE** | `/profile/documents/:id` | Yes  | 🗑️ Supprimer un document spécifique du profil utilisateur          |
+| **PATCH**  | `/profile/documents/:id` | Yes  | ✏️ Modifier un document spécifique du profil utilisateur (Not done yet) |
+| **DELETE** | `/profile/documents/:id` | Yes  | 🗑️ Supprimer un document spécifique du profil utilisateur (Not done yet) |
 
 ## 🗓️ Gestion des Plannings
 Gestion des calendriers et des évènements  
@@ -96,6 +99,12 @@ Gestion de rendez-vous entre demandeurs et conseillers
 | **DELETE** | `/appointments/:id`          | Advisor, Admin      | ❌ Annuler ou supprimer un **rendez-vous**                                 |
 | **GET**    | `/appointments/registration` | Advisor, Admin      | 🔍 Récupère la liste des **rendez-vous d'inscription** en cours et futures |
 | **POST**   | `/appointments/registration` | No                  | 📅 Enregistre un nouveau **rendez-vous d'inscription**                     |
+
+## 👤 Gestion des conseillers
+Gestion des données du conseiller
+| Méthode | Route                   | Auth    | Description                                                                              |
+| ------- | ----------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| **GET** | `/advisors/job-seekers` | Advisor | 🔍 Récupérer la liste des **demandeurs d'emploi** assignés à ce conseiller _(filtrable)_ |
 
 
 ## 💬 Gestion des Messages (**Inexistant**)

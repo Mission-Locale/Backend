@@ -47,15 +47,13 @@ class WorkshopRepository {
       return { error: err };
     }
   }
-  /* find workshop */
-  /*
-        
-    */
+
+  /* find workshop recurrences */
   async findMany(
     advisorId = undefined,
     jobSeekerId = undefined,
     from = undefined,
-    to = undefined
+    to = undefined,
   ) {
     try {
       return await this.db.workshopRecurrence.findMany({
@@ -65,10 +63,14 @@ class WorkshopRepository {
             lte: to,
           },
           registrations: {
-            job_seeker_id: jobSeekerId,
+            some: {
+              job_seeker_id: jobSeekerId,
+            },
           },
           animators: {
-            advisor_id: advisorId,
+            some: {
+              advisor_id: advisorId,
+            },
           },
         },
         include: {
@@ -96,7 +98,8 @@ class WorkshopRepository {
       return { error: err };
     }
   }
-  /* update workshop */
+
+  /* delete workshop */
   async delete(id) {
     try {
       return await this.db.workshop.delete({

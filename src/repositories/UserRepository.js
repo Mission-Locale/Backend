@@ -44,16 +44,19 @@ class UserRepository {
           const resetToken = await TokenRepository.generate(
             user.user_id,
             "RESET_TOKEN",
-            72 * 60 * 60 // 72 heures
+            72 * 60 * 60, // 72 heures
           );
           await mailService.sendAdvisorInvitation(
             user.email,
             user.first_name,
             user.last_name,
-            resetToken
+            resetToken,
           );
         } catch (emailErr) {
-          console.error("Erreur lors de l'envoi de l'email d'invitation:", emailErr);
+          console.error(
+            "Erreur lors de l'envoi de l'email d'invitation:",
+            emailErr,
+          );
         }
       }
 
@@ -65,7 +68,7 @@ class UserRepository {
   }
 
   /* Find a specific user with id or mail */
-  async find(idOrEmail) {
+  async find(idOrEmail, password = false) {
     try {
       return await this.db.user.findUnique({
         where: idOrEmail.includes("@")
@@ -75,6 +78,9 @@ class UserRepository {
           jobSeeker: true,
           advisor: true,
           administrator: true,
+        },
+        omit: {
+          password: !password,
         },
       });
     } catch (err) {
@@ -106,11 +112,14 @@ class UserRepository {
         },
         include: {
           jobSeeker: true,
-          advisor: roleType === "ADVISOR" ? {
-            include: {
-              assigned_job_seekers: true,
-            },
-          } : true,
+          advisor:
+            roleType === "ADVISOR"
+              ? {
+                  include: {
+                    assigned_job_seekers: true,
+                  },
+                }
+              : true,
           administrator: true,
         },
         orderBy: { createdAt: order },
@@ -143,8 +152,8 @@ class UserRepository {
   async update(id, data) {
     try {
       const { profile_picture_path, ...userData } = data;
-      return await this.db.user.update({ 
-        where: { user_id: id }, 
+      return await this.db.user.update({
+        where: { user_id: id },
         data: {
           ...userData,
           ...(profile_picture_path !== undefined && {

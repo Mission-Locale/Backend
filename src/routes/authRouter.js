@@ -45,7 +45,7 @@ const authRouter = Router()
       const validatedData = await loginValidator.validate(req.body, {
         abortEarly: false,
       });
-      const user = await userRepository.find(validatedData.email);
+      const user = await userRepository.find(validatedData.email, true);
 
       if (!user) throw { error: "Addresse email incorrecte" };
       if (!(await compare(validatedData.password, user.password))) throw { error: "Mot de passe incorrecte" };
