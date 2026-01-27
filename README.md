@@ -146,12 +146,4 @@ Envoi de messages entre utilisateur et conseillé
 | **PATCH**  | `/events/:id` |      | ✏️ Modifier un **événement**                          |
 | **DELETE** | `/events/:id` |      | 🗑️ Supprimer un **événement**                         |
 
----
-
-### Gestion des Inscriptions aux Events (**Inexistant**)
-
-| Méthode    | Route                       | Auth | Description                                                        |
-| ---------- | --------------------------- | ---- | ------------------------------------------------------------------ |
-| **DELETE** | `/events/:id/queue/:userId` |      | ❌ Se désinscrire d'un **événement** spécifique                    |
-
 **(TODO: Ajouter les chemins des articles)**
