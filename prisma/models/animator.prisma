@@ -8,4 +8,6 @@ model Animator {
     advisor                Advisor            @relation(fields: [advisor_id], references: [advisor_id], onDelete: Cascade)
     workshop_recurrence_id Int
     workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+
+    @@unique([advisor_id, workshop_recurrence_id])
 }

@@ -122,13 +122,17 @@ Envoi de messages entre utilisateur et conseillé
 
 ### Gestion des Ateliers (événements récurrents)
 
-| Méthode    | Route                   | Auth | Description                                          |
-| ---------- | ----------------------- | ---- | ---------------------------------------------------- |
-| **POST**   | `/workshops`            |      | 📝 Créer un nouvel **atelier** (événement récurrent) |
-| **GET**    | `/workshops`            |      | 🔍 Récupérer la liste de tous les **atelier**        |
-| **GET**    | `/workshops/detail/:id` |      | 🔎 Récupérer un **atelier** spécifique par ID        |
-| **PATCH**  | `/workshops/:id`        |      | ✏️ Modifier un **atelier**                           |
-| **DELETE** | `/workshops/:id`        |      | 🗑️ Supprimer un **atelier**                          |
+| Méthode    | Route                                                 | Auth           | Description                                                    |
+| ---------- | ----------------------------------------------------- | -------------- | -------------------------------------------------------------- |
+| **POST**   | `/workshops`                                          | Admin          | 📝 Créer un nouvel **atelier** (événement récurrent)           |
+| **GET**    | `/workshops`                                          | No             | 🔍 Récupérer la liste de tous les **atelier**                  |
+| **GET**    | `/workshops/:id`                                      | Admin          | 🔎 Récupérer un **atelier** spécifique par ID                  |
+| **PATCH**  | `/workshops/:id`                                      | Admin          | ✏️ Modifier un **atelier**                                     |
+| **DELETE** | `/workshops/:id`                                      | Admin          | 🗑️ Supprimer un **atelier**                                    |
+| **POST**   | `/workshops/recurrences/:id/register`                 | Yes            | 📝 Inscrire un **demandeur** à une **récurrence d'atelier**    |
+| **POST**   | `/workshops/recurrences/:id/animators`                | Admin, Advisor | 📝 Ajouter un **conseiller** à une **récurrence d'atelier**    |
+| **DELETE** | `/workshops/recurrences/:id/unregister/:jobSeekerId?` | Yes            | ❌ Désinscrire un **demandeur** d'une **récurrence d'atelier** |
+| **DELETE** | `/workshops/recurrences/:id/animators/:advisorId?`    | Admin, Advisor | ❌ Retirer un **conseiller** d'une **récurrence d'atelier**    |
 
 ---
 
@@ -148,8 +152,6 @@ Envoi de messages entre utilisateur et conseillé
 
 | Méthode    | Route                       | Auth | Description                                                        |
 | ---------- | --------------------------- | ---- | ------------------------------------------------------------------ |
-| **POST**   | `/events/:id/queue`         |      | 📝 S'inscrire à un **événement** spécifique                        |
-| **GET**    | `/events/:id/queue`         |      | 🔍 Récupérer la liste des utilisateurs inscrits à un **événement** |
 | **DELETE** | `/events/:id/queue/:userId` |      | ❌ Se désinscrire d'un **événement** spécifique                    |
 
 **(TODO: Ajouter les chemins des articles)**
