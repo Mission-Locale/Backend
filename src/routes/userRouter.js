@@ -50,18 +50,20 @@ const userRouter = Router()
       try {
         const id = req.params.id;
         const jobSeeker = await JobSeekerRepository.find(id);
+
         if (!jobSeeker)
           res.status(404).json({ error: "Demandeur d'emploi non trouvé" });
-        if (
+        else if (
           req.user.roleType == "ADVISOR" &&
           jobSeeker.assigned_advisor_id != null &&
-          jobSeeker.assigned_advisor_id != req.user.user_id
+          jobSeeker.assigned_advisor_id != req.user.advisor.advisor_id
         )
           res
             .status(403)
             .json({ error: "Ce demandeur est assigné à un autre conseillé!" });
         else res.json(jobSeeker);
       } catch (err) {
+        console.error(err);
         res.status(400).json(err);
       }
   })

@@ -7,7 +7,7 @@ class AppointmentRepository {
   async create(data) {
     const status = isBefore(
       addMinutes(data.startTime, data.duration),
-      Date.now()
+      Date.now(),
     )
       ? "MISSED"
       : "PENDING";
@@ -30,9 +30,8 @@ class AppointmentRepository {
       try {
         await microsoftService.addAppointment(appointment);
       } catch (err) {
-        console.error(err) //TODO: logs/notify microsoft errors
+        console.error(err); //TODO: logs/notify microsoft errors
       }
-      
 
       return appointment;
     } catch (err) {
@@ -45,7 +44,7 @@ class AppointmentRepository {
     try {
       return await database.appointment.update({
         where: {
-          id: appointementId,
+          appointment_id: appointementId,
         },
         data: {
           state: newState,
@@ -86,7 +85,8 @@ class AppointmentRepository {
     advisorId = undefined,
     jobSeekerId = undefined,
     from = undefined,
-    to = undefined
+    to = undefined,
+    ignoreCancelled = true,
   ) {
     if (advisorId === undefined && jobSeekerId === undefined) {
       throw {
@@ -100,6 +100,7 @@ class AppointmentRepository {
           advisor_id: advisorId,
           job_seeker_id: jobSeekerId,
           startTime: { lt: to, gte: from }, // TODO: rework model, remove duration and add endTime to improve filtering
+          state: ignoreCancelled ? { not: "CANCELLED" } : undefined,
         },
       });
     } catch (err) {

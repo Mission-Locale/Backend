@@ -55,9 +55,29 @@ class WorkshopRepository {
         where: { workshop_recurrence_id: recurrenceId },
         include: {
           workshop: true,
-          registrations: true,
-          animators: true,
-          coAnimators: true,
+          registrations: {
+            include: {
+              job_seeker: {
+                select: {
+                  user: { select: { first_name: true, last_name: true } },
+                },
+              },
+            },
+          },
+          animators: {
+            include: {
+              advisor: {
+                select: {
+                  user: { select: { first_name: true, last_name: true } },
+                },
+              },
+            },
+          },
+          coAnimators: {
+            include: {
+              external_animator: true,
+            },
+          },
         },
       });
     } catch (err) {
@@ -97,9 +117,6 @@ class WorkshopRepository {
         },
         include: {
           workshop: true,
-          registrations: true,
-          animators: true,
-          coAnimators: true,
         },
       });
     } catch (err) {

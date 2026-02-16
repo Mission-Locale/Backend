@@ -9,9 +9,8 @@ const advisorRouter = Router().get(
   authguard,
   advisorguard,
   async (req, res) => {
-    req.query.name;
     res.json(
-      AdvisorRepository.findAssignedJobSeekers(
+      await AdvisorRepository.findAssignedJobSeekers(
         req.user.advisor.advisor_id,
         req.query.name,
       ),

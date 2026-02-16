@@ -25,9 +25,9 @@ function mapWorkshopReccurenceToCalendarEvent(workshopReccurence) {
   return {
     id: workshopReccurence.workshop_recurrence_id,
     timeZone: "UTC",
-    start: workshopIteration.startTime,
-    end: addMinutes(workshopIteration.startTime, workshopIteration.duration),
-    title: workshopIteration.topic,
+    start: workshopReccurence.startTime,
+    end: addMinutes(workshopReccurence.startTime, workshopReccurence.duration),
+    title: workshopReccurence.topic,
     color: "purple",
     extendedProps: {
       type: "WORKSHOP_RECURRENCE",
@@ -39,9 +39,9 @@ function mapWorkshopReccurenceToCalendarEvent(workshopReccurence) {
 async function getAppointmentAndWorkshopForJobSeeker(
   jobSeekerId,
   from = undefined,
-  to = undefined
+  to = undefined,
 ) {
-  const events = [
+  return [
     ...(
       await AppointmentRepository.getAll(undefined, jobSeekerId, from, to)
     ).map(mapAppointmentToCalendarEvent),
@@ -54,14 +54,14 @@ async function getAppointmentAndWorkshopForJobSeeker(
 async function getAppointmentAndWorkshopForAdvisor(
   advisorId,
   from = undefined,
-  to = undefined
+  to = undefined,
 ) {
-  const events = [
+  return [
     ...(await AppointmentRepository.getAll(advisorId, undefined, from, to)).map(
-      mapAppointmentToCalendarEvent
+      mapAppointmentToCalendarEvent,
     ),
     ...(await WorkshopRepository.findMany(advisorId, undefined, from, to)).map(
-      mapWorkshopReccurenceToCalendarEvent
+      mapWorkshopReccurenceToCalendarEvent,
     ),
   ];
 }
@@ -70,8 +70,8 @@ const planningRouter = Router()
   .get("/planning/registration", authGuard, adminGuard, async (req, res) => {
     return res.json(
       (await AppointmentRepository.getAll(null, undefined, new Date())).map(
-        mapAppointmentToCalendarEvent
-      )
+        mapAppointmentToCalendarEvent,
+      ),
     );
   })
   .get("/planning/me", authGuard, async (req, res) => {
@@ -79,18 +79,20 @@ const planningRouter = Router()
       case "JOB_SEEKER":
         return res.json(
           await getAppointmentAndWorkshopForJobSeeker(
-            req.user.jobSeeker.job_seeker_id
-          )
+            req.user.jobSeeker.job_seeker_id,
+          ),
         );
       case "ADVISOR":
         return res.json(
-          await getAppointmentAndWorkshopForAdvisor(req.user.advisor.advisor_id)
+          await getAppointmentAndWorkshopForAdvisor(
+            req.user.advisor.advisor_id,
+          ),
         );
       case "ADMINISTRATOR":
         return res.json(
           (await AppointmentRepository.getAll(null, undefined)).map(
-            mapAppointmentToCalendarEvent
-          )
+            mapAppointmentToCalendarEvent,
+          ),
         );
       default:
         return res
@@ -104,9 +106,9 @@ const planningRouter = Router()
     adminGuard,
     async (req, res) => {
       return res.json(
-        await getAppointmentAndWorkshopForAdvisor(req.params.advisorId)
+        await getAppointmentAndWorkshopForAdvisor(req.params.advisorId),
       );
-    }
+    },
   )
   .get(
     "/planning/job-seeker/:jobSeeker",
@@ -114,9 +116,9 @@ const planningRouter = Router()
     adminGuard,
     async (req, res) => {
       return res.json(
-        await getAppointmentAndWorkshopForJobSeeker(req.params.jobSeeker)
+        await getAppointmentAndWorkshopForJobSeeker(req.params.jobSeeker),
       );
-    }
+    },
   )
   .get("/planning/free-appointments", async (req, res) => {
     const { start, end, duration } = req.query;
@@ -130,7 +132,7 @@ const planningRouter = Router()
       const response = await MicrosoftService.getRegistrationSchedule(
         startDate,
         endDate,
-        duration
+        duration,
       );
 
       const view = response.value[0]?.availabilityView;
@@ -143,7 +145,7 @@ const planningRouter = Router()
       for (let i = 0; i < view.length; i++) {
         if (view[i] === "0") {
           const slotStart = new Date(
-            startDate.getTime() + i * duration * 60 * 1000
+            startDate.getTime() + i * duration * 60 * 1000,
           );
           availableSlots.push({
             date: slotStart.toISOString().split("T")[0],

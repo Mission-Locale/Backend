@@ -17,7 +17,7 @@ Partie backend du projet de l'application web de la Mission Locale du Pays d'Aub
 - [🗓 Gestion des Rendez-vous](#-gestion-des-rendez-vous)
 - [👤 Gestion des conseillers](#-gestion-des-conseillers)
 - [💬 Gestion des Messages](#-gestion-des-messages-inexistant)
-- [🛠 Gestion des Ateliers et Events](#-gestion-des-ateliers-et-events)
+- [🛠 Gestion des Ateliers et Events](#-gestion-des-ateliers-et-récurrences)
 
 ## 🛠 Initialisation
 Liste des commandes pour initialiser et utiliser le projet:
@@ -118,7 +118,7 @@ Envoi de messages entre utilisateur et conseillé
 | **GET**    | `/messages/:id` |      | 🔎 Récupérer un **message** spécifique par ID                                   |
 | **DELETE** | `/messages/:id` |      | 🗑️ Supprimer un **message** spécifique                                          |
 
-## 🛠 Gestion des Ateliers et Events
+## 🛠 Gestion des Ateliers et Récurrences
 
 ### Gestion des Ateliers (événements récurrents)
 
@@ -126,9 +126,10 @@ Envoi de messages entre utilisateur et conseillé
 | ---------- | ----------------------------------------------------- | -------------- | -------------------------------------------------------------- |
 | **POST**   | `/workshops`                                          | Admin          | 📝 Créer un nouvel **atelier** (événement récurrent)           |
 | **GET**    | `/workshops`                                          | No             | 🔍 Récupérer la liste de tous les **atelier**                  |
-| **GET**    | `/workshops/:id`                                      | Admin          | 🔎 Récupérer un **atelier** spécifique par ID                  |
+| **GET**    | `/workshops/:id`                                      | No             | 🔎 Récupérer un **atelier** spécifique par ID                  |
 | **PATCH**  | `/workshops/:id`                                      | Admin          | ✏️ Modifier un **atelier**                                     |
 | **DELETE** | `/workshops/:id`                                      | Admin          | 🗑️ Supprimer un **atelier**                                    |
+| **GET**    | `/workshops/recurrences/:id`                          | No             | 🔎 Récupérer une **récurrence d'atelier** spécifique par ID    |
 | **POST**   | `/workshops/recurrences/:id/register`                 | Yes            | 📝 Inscrire un **demandeur** à une **récurrence d'atelier**    |
 | **POST**   | `/workshops/recurrences/:id/animators`                | Admin, Advisor | 📝 Ajouter un **conseiller** à une **récurrence d'atelier**    |
 | **DELETE** | `/workshops/recurrences/:id/unregister/:jobSeekerId?` | Yes            | ❌ Désinscrire un **demandeur** d'une **récurrence d'atelier** |
@@ -141,8 +142,6 @@ Envoi de messages entre utilisateur et conseillé
 | Méthode    | Route         | Auth | Description                                           |
 | ---------- | ------------- | ---- | ----------------------------------------------------- |
 | **POST**   | `/events`     |      | 📝 Créer un **événement** spécifique d'un **atelier** |
-| **GET**    | `/events`     |      | 🔍 Récupérer la liste de tous les **événements**      |
-| **GET**    | `/events/:id` |      | 🔎 Récupérer un **événement** spécifique par ID       |
 | **PATCH**  | `/events/:id` |      | ✏️ Modifier un **événement**                          |
 | **DELETE** | `/events/:id` |      | 🗑️ Supprimer un **événement**                         |
 

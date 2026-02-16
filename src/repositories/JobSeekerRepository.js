@@ -7,7 +7,7 @@ class JobSeekerRepository {
   async find(id) {
     try {
       return await this.db.jobSeeker.findUnique({
-        where: { user_id: id },
+        where: { job_seeker_id: id },
         include: {
           user: {
             omit: {

@@ -39,6 +39,8 @@ const workshopRouter = Router()
     adminguard,
     uploadWorkshopImage,
     async (req, res) => {
+      console.log(req.body); //TODO: complete for later
+
       try {
         const workshopData = {
           title: req.body.title,
@@ -68,7 +70,7 @@ const workshopRouter = Router()
     },
   )
 
-  .get("/workshops/:id", authguard, adminguard, async (req, res) => {
+  .get("/workshops/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const workshop = await workshopRepository.find(id);
@@ -93,6 +95,19 @@ const workshopRouter = Router()
       const id = parseInt(req.params.id);
       const workshop = await workshopRepository.delete(id);
       res.json(workshop);
+    } catch (err) {
+      res.status(400).json({ error: err });
+    }
+  })
+
+  .get("/workshops/recurrences/:id", async (req, res) => {
+    try {
+      const recurrence = await workshopRepository.findRecurrence(
+        parseInt(req.params.id),
+      );
+      if (!recurrence) throw "Récurrence d'atelier non trouvé";
+
+      res.json(recurrence);
     } catch (err) {
       res.status(400).json({ error: err });
     }

@@ -21,6 +21,7 @@ const RESET_TOKEN_KEY = process.env.JWT_RESET_KEY;
 const authRouter = Router()
 
   .post("/auth/register", uploadRegister, async (req, res) => {
+    //TODO: forbid advisor and administrator creation from non-admin users
     try {
       const validatedData = await registerValidator.validate(req.body, {
         abortEarly: false,
