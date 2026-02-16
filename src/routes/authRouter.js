@@ -21,6 +21,7 @@ const RESET_TOKEN_KEY = process.env.JWT_RESET_KEY;
 const authRouter = Router()
 
   .post("/auth/register", uploadRegister, async (req, res) => {
+    //TODO: forbid advisor and administrator creation from non-admin users
     try {
       const validatedData = await registerValidator.validate(req.body, {
         abortEarly: false,
@@ -45,7 +46,7 @@ const authRouter = Router()
       const validatedData = await loginValidator.validate(req.body, {
         abortEarly: false,
       });
-      const user = await userRepository.find(validatedData.email);
+      const user = await userRepository.find(validatedData.email, true);
 
       if (!user) throw { error: "Addresse email incorrecte" };
       if (!(await compare(validatedData.password, user.password))) throw { error: "Mot de passe incorrecte" };

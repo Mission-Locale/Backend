@@ -45,9 +45,11 @@ class MicrosoftService {
       subject: subject,
       start: {
         dateTime: appointment.startTime,
+        timeZone: "UTC",
       },
       end: {
         dateTime: addMinutes(appointment.startTime, appointment.duration),
+        timeZone: "UTC",
       },
       id: appointment.id,
     });

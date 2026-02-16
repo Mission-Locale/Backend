@@ -8,4 +8,6 @@ model CoAnimator {
     external_animator      ExternalAnimator   @relation(fields: [external_animator_id], references: [external_animator_id], onDelete: Cascade)
     workshop_recurrence_id Int
     workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+
+    @@unique([external_animator_id, workshop_recurrence_id])
 }

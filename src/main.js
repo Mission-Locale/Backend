@@ -6,6 +6,7 @@ import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
+import advisorRouter from "./routes/advisorRouter.js";
 import articleRouter from "./routes/articleRouter.js";
 import appointmentRouter from "./routes/appointmentRouter.js";
 import planningRouter from "./routes/planningRouter.js";
@@ -20,7 +21,7 @@ const app = express()
     cors({
       origin: "http://localhost:5173",
       credentials: true,
-    })
+    }),
   )
   .use(
     rateLimit({
@@ -29,7 +30,7 @@ const app = express()
       standardHeaders: true,
       legacyHeaders: false,
       message: "Too many request.",
-    })
+    }),
   )
   .use(helmet())
   .use(cookieParser())
@@ -39,19 +40,23 @@ const app = express()
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
       next();
     },
-    express.static("public")
+    express.static("public"),
   )
   .use(express.urlencoded({ extended: true }))
   .use(express.json({ limit: "10mb" }))
   .use(authRouter)
   .use(userRouter)
   .use(profileRouter)
+  .use(advisorRouter)
   .use(articleRouter)
   .use(workshopRouter)
   .use(appointmentRouter)
   .use(planningRouter)
   .use((_, res) =>
-    setTimeout(() => res.status(404).json({ message: "Route not found" }), 3000)
+    setTimeout(
+      () => res.status(404).json({ message: "Route not found" }),
+      3000,
+    ),
   )
   .use((err, req, res, next) => {
     console.error(err);

@@ -47,15 +47,51 @@ class WorkshopRepository {
       return { error: err };
     }
   }
+
   /* find workshop */
-  /*
-        
-    */
+  async findRecurrence(recurrenceId) {
+    try {
+      return await this.db.workshopRecurrence.findUnique({
+        where: { workshop_recurrence_id: recurrenceId },
+        include: {
+          workshop: true,
+          registrations: {
+            include: {
+              job_seeker: {
+                select: {
+                  user: { select: { first_name: true, last_name: true } },
+                },
+              },
+            },
+          },
+          animators: {
+            include: {
+              advisor: {
+                select: {
+                  user: { select: { first_name: true, last_name: true } },
+                },
+              },
+            },
+          },
+          coAnimators: {
+            include: {
+              external_animator: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* find workshop recurrences */
   async findMany(
     advisorId = undefined,
     jobSeekerId = undefined,
     from = undefined,
-    to = undefined
+    to = undefined,
   ) {
     try {
       return await this.db.workshopRecurrence.findMany({
@@ -64,18 +100,23 @@ class WorkshopRepository {
             gte: from,
             lte: to,
           },
-          registrations: {
-            job_seeker_id: jobSeekerId,
-          },
-          animators: {
-            advisor_id: advisorId,
-          },
+          registrations: jobSeekerId
+            ? {
+                some: {
+                  job_seeker_id: jobSeekerId,
+                },
+              }
+            : undefined,
+          animators: advisorId
+            ? {
+                some: {
+                  advisor_id: advisorId,
+                },
+              }
+            : undefined,
         },
         include: {
           workshop: true,
-          registrations: true,
-          animators: true,
-          coAnimators: true,
         },
       });
     } catch (err) {
@@ -96,11 +137,103 @@ class WorkshopRepository {
       return { error: err };
     }
   }
-  /* update workshop */
+
+  /* delete workshop */
   async delete(id) {
     try {
       return await this.db.workshop.delete({
         where: { workshop_id: id },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* register a job seeker to a recurrence */
+  async registerJobSeeker(recurrenceId, jobSeekerId) {
+    try {
+      const recurrence = await this.findRecurrence(recurrenceId);
+
+      const registrationState =
+        recurrence.registrations.length >= recurrence.maxOccupation
+          ? "PENDING"
+          : "REGISTERED";
+      return await this.db.registration.create({
+        state: registrationState,
+        job_seeker_id: jobSeekerId,
+        workshop_recurrence_id: recurrenceId,
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Add an advisor to a recurrence */
+  async addAnimator(recurrenceId, advisorId) {
+    try {
+      return await this.db.animator.create({
+        advisor_id: advisorId,
+        workshop_recurrence_id: recurrenceId,
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Add an external animator to a recurrence */
+  async addExternalAnimator(recurrenceId, animatorId) {
+    try {
+      return await this.db.coAnimator.create({
+        external_animator_id: animatorId,
+        workshop_recurrence_id: recurrenceId,
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* unregister a job seeker to a recurrence */
+  async unregisterJobSeeker(recurrenceId, jobSeekerId) {
+    try {
+      return await this.db.registration.delete({
+        where: {
+          workshop_recurrence_id: recurrenceId,
+          job_seeker_id: jobSeekerId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Remove an advisor from a recurrence */
+  async removeAnimator(recurrenceId, advisorId) {
+    try {
+      return await this.db.animator.delete({
+        where: {
+          advisor_id: advisorId,
+          workshop_recurrence_id: recurrenceId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Remove an external animator from a recurrence */
+  async removeExternalAnimator(recurrenceId, animatorId) {
+    try {
+      return await this.db.coAnimator.delete({
+        where: {
+          external_animator_id: animatorId,
+          workshop_recurrence_id: recurrenceId,
+        },
       });
     } catch (err) {
       console.error(err);

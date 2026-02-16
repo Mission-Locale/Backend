@@ -9,6 +9,8 @@ model Registration {
     job_seeker             JobSeeker          @relation(fields: [job_seeker_id], references: [job_seeker_id], onDelete: Cascade)
     workshop_recurrence_id Int
     workshop_recurrence    WorkshopRecurrence @relation(fields: [workshop_recurrence_id], references: [workshop_recurrence_id], onDelete: Cascade)
+
+    @@unique([job_seeker_id, workshop_recurrence_id])
 }
 
 enum RegistrationState {
