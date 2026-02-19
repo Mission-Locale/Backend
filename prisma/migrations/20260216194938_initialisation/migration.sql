@@ -14,7 +14,7 @@ CREATE TABLE `Administrator` (
 CREATE TABLE `Advisor` (
     `advisor_id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
-    `profile_picture_path` VARCHAR(191) NOT NULL,
+    `profile_picture_path` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -30,6 +30,7 @@ CREATE TABLE `Animator` (
     `workshop_recurrence_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `Animator_animator_id_key`(`animator_id`),
+    UNIQUE INDEX `Animator_advisor_id_workshop_recurrence_id_key`(`advisor_id`, `workshop_recurrence_id`),
     PRIMARY KEY (`animator_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -82,6 +83,7 @@ CREATE TABLE `CoAnimator` (
     `workshop_recurrence_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `CoAnimator_co_animator_id_key`(`co_animator_id`),
+    UNIQUE INDEX `CoAnimator_external_animator_id_workshop_recurrence_id_key`(`external_animator_id`, `workshop_recurrence_id`),
     PRIMARY KEY (`co_animator_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -113,7 +115,7 @@ CREATE TABLE `ExternalAnimator` (
 CREATE TABLE `JobSeeker` (
     `job_seeker_id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
-    `assigned_advisor_id` VARCHAR(191) NOT NULL,
+    `assigned_advisor_id` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -142,6 +144,7 @@ CREATE TABLE `Registration` (
     `workshop_recurrence_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `Registration_registration_id_key`(`registration_id`),
+    UNIQUE INDEX `Registration_job_seeker_id_workshop_recurrence_id_key`(`job_seeker_id`, `workshop_recurrence_id`),
     PRIMARY KEY (`registration_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -287,7 +290,7 @@ ALTER TABLE `Document` ADD CONSTRAINT `Document_job_seeker_id_fkey` FOREIGN KEY 
 ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_assigned_advisor_id_fkey` FOREIGN KEY (`assigned_advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `JobSeeker` ADD CONSTRAINT `JobSeeker_assigned_advisor_id_fkey` FOREIGN KEY (`assigned_advisor_id`) REFERENCES `Advisor`(`advisor_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Message` ADD CONSTRAINT `Message_sender_id_fkey` FOREIGN KEY (`sender_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
