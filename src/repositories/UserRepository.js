@@ -40,12 +40,12 @@ class UserRepository {
 
       // Envoyer un email d'invitation si c'est un advisor
       if (data.roleType === "ADVISOR") {
+        const resetToken = await TokenRepository.generate(
+          user.user_id,
+          "RESET_TOKEN",
+          72 * 60 * 60, // 72 heures
+        );
         try {
-          const resetToken = await TokenRepository.generate(
-            user.user_id,
-            "RESET_TOKEN",
-            72 * 60 * 60, // 72 heures
-          );
           await mailService.sendAdvisorInvitation(
             user.email,
             user.first_name,
@@ -56,6 +56,9 @@ class UserRepository {
           console.error(
             "Erreur lors de l'envoi de l'email d'invitation:",
             emailErr,
+          );
+          console.log(
+            "The token generated for the errored mail is : " + resetToken,
           );
         }
       }

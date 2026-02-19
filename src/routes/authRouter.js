@@ -54,11 +54,11 @@ const authRouter = Router()
       const accessToken = await tokenRepository.generate(
         user.user_id,
         "ACCESS_TOKEN",
-        5 * 60 * 1000,
+        5 * 60,
       );
       const expiration = validatedData.keep_connected
-        ? 7 * 24 * 60 * 60 * 1000
-        : 3 * 60 * 60 * 1000;
+        ? 7 * 24 * 60 * 60
+        : 3 * 60 * 60;
       const refreshToken = await tokenRepository.generate(
         user.user_id,
         "REFRESH_TOKEN",
@@ -67,8 +67,7 @@ const authRouter = Router()
 
       return res
         .cookie("refresh", refreshToken, {
-          maxAge: expiration,
-          expires: new Date(Date.now() + expiration),
+          maxAge: expiration * 1000,
           ...cookieOptions,
         })
         .json({ token: accessToken, role: user.roleType });
@@ -92,7 +91,7 @@ const authRouter = Router()
       accessToken = await tokenRepository.generate(
         user.user_id,
         "ACCESS_TOKEN",
-        5 * 60 * 1000,
+        5 * 60,
       );
       res.json({ token: accessToken });
     } catch (err) {
@@ -199,12 +198,16 @@ const authRouter = Router()
       try {
         decoded = jwt.verify(token, RESET_TOKEN_KEY);
       } catch (error) {
-        return res.status(400).json({ valid: false, error: "Token invalide ou expiré" });
+        return res
+          .status(400)
+          .json({ valid: false, error: "Token invalide ou expiré" });
       }
 
       const tokenData = await tokenRepository.find(decoded.key);
       if (!tokenData) {
-        return res.status(400).json({ valid: false, error: "Token invalide ou expiré" });
+        return res
+          .status(400)
+          .json({ valid: false, error: "Token invalide ou expiré" });
       }
 
       if (new Date() > new Date(tokenData.expiresAt)) {
