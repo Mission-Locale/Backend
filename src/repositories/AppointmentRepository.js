@@ -30,7 +30,7 @@ class AppointmentRepository {
       try {
         await microsoftService.addAppointment(appointment);
       } catch (err) {
-        console.error(err); //TODO: logs/notify microsoft errors
+        console.warn(err); //TODO: logs/notify microsoft errors
       }
 
       return appointment;

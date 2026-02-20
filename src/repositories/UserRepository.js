@@ -57,7 +57,7 @@ class UserRepository {
             "Erreur lors de l'envoi de l'email d'invitation:",
             emailErr,
           );
-          console.log(
+          console.warn(
             "The token generated for the errored mail is : " + resetToken,
           );
         }
