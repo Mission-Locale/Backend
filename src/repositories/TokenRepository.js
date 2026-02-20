@@ -11,15 +11,15 @@ class TokenRepository {
   };
 
   /* Generate a token */
-  async generate(userId, tokenType, expiresIn, additionnalData = {}) {
+  async generate(userId, tokenType, expiresInSeconds, additionnalData = {}) {
     const secret = this.secrets[tokenType];
     const isAccess = tokenType === "ACCESS_TOKEN";
     const key = isAccess ? userId : crypto.randomBytes(10).toString("hex");
 
     try {
-      const token = jwt.sign({ key }, secret, { expiresIn });
+      const token = jwt.sign({ key }, secret, { expiresIn: expiresInSeconds + "s" });
       if (!isAccess) {
-        await this.save(userId, tokenType, key, expiresIn);
+        await this.save(userId, tokenType, key, expiresInSeconds);
       }
 
       return token;

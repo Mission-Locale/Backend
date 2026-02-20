@@ -19,33 +19,32 @@
     "Mael"
   ],
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.14.1",
     "prisma": "^6.19.1"
   },
   "dependencies": {
-    "@azure/identity": "^4.10.1",
+    "@azure/identity": "^4.13.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@prisma/adapter-mssql": "^7.1.0",
     "@prisma/client": "^6.19.1",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "express-async-errors": "^3.1.1",
-    "express-rate-limit": "^7.5.0",
+    "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1",
-    "nodemailer": "^7.0.12",
-    "nodemon": "^3.1.10",
+    "nodemailer": "^8.0.1",
+    "nodemon": "^3.1.11",
     "yup": "^1.6.1"
   }
 }
