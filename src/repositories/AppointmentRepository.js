@@ -16,7 +16,7 @@ class AppointmentRepository {
       const appointment = await database.appointment.create({
         data: {
           startTime: data.startTime,
-          duration: data.duration,
+          duration: parseInt(data.duration),
           advisor_id: data.advisor_id,
           job_seeker_id: data.job_seeker_id,
           state: status,
