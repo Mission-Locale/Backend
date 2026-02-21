@@ -49,17 +49,22 @@ class WorkshopRepository {
   }
 
   /* find workshop */
-  async findRecurrence(recurrenceId) {
+  async findRecurrence(recurrenceId, includeRegistrations = false) {
     try {
       return await this.db.workshopRecurrence.findUnique({
         where: { workshop_recurrence_id: recurrenceId },
         include: {
           workshop: true,
-          registrations: {
+          _count: !includeRegistrations && {
+            select: {
+              registrations: true,
+            },
+          },
+          registrations: includeRegistrations && {
             include: {
               job_seeker: {
-                select: {
-                  user: { select: { first_name: true, last_name: true } },
+                include: {
+                  user: { omit: { password: true } },
                 },
               },
             },
@@ -160,9 +165,11 @@ class WorkshopRepository {
           ? "PENDING"
           : "REGISTERED";
       return await this.db.registration.create({
-        state: registrationState,
-        job_seeker_id: jobSeekerId,
-        workshop_recurrence_id: recurrenceId,
+        data: {
+          state: registrationState,
+          job_seeker_id: jobSeekerId,
+          workshop_recurrence_id: recurrenceId,
+        },
       });
     } catch (err) {
       console.error(err);
@@ -199,7 +206,7 @@ class WorkshopRepository {
   /* unregister a job seeker to a recurrence */
   async unregisterJobSeeker(recurrenceId, jobSeekerId) {
     try {
-      return await this.db.registration.delete({
+      return await this.db.registration.deleteMany({
         where: {
           workshop_recurrence_id: recurrenceId,
           job_seeker_id: jobSeekerId,
@@ -214,7 +221,7 @@ class WorkshopRepository {
   /* Remove an advisor from a recurrence */
   async removeAnimator(recurrenceId, advisorId) {
     try {
-      return await this.db.animator.delete({
+      return await this.db.animator.deleteMany({
         where: {
           advisor_id: advisorId,
           workshop_recurrence_id: recurrenceId,
@@ -229,7 +236,7 @@ class WorkshopRepository {
   /* Remove an external animator from a recurrence */
   async removeExternalAnimator(recurrenceId, animatorId) {
     try {
-      return await this.db.coAnimator.delete({
+      return await this.db.coAnimator.deleteMany({
         where: {
           external_animator_id: animatorId,
           workshop_recurrence_id: recurrenceId,

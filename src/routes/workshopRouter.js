@@ -3,6 +3,7 @@ import WorkshopRepository from "../repositories/WorkshopRepository.js";
 import JobSeekerRepository from "../repositories/JobSeekerRepository.js";
 import { uploadWorkshopImage } from "../middlewares/multer.js";
 import authguard from "../middlewares/authguard.js";
+import optionalauth from "../middlewares/optionalauth.js";
 import adminguard from "../middlewares/adminguard.js";
 
 const workshopRepository = WorkshopRepository;
@@ -100,15 +101,27 @@ const workshopRouter = Router()
     }
   })
 
-  .get("/workshops/recurrences/:id", async (req, res) => {
+  .get("/workshops/recurrences/:id", optionalauth, async (req, res) => {
     try {
+      let listRegistration;
+      switch (req.user?.roleType) {
+        case "ADVISOR":
+        case "ADMINISTRATOR":
+          listRegistration = true;
+          break;
+        default:
+          listRegistration = false;
+          break;
+      }
       const recurrence = await workshopRepository.findRecurrence(
         parseInt(req.params.id),
+        listRegistration,
       );
       if (!recurrence) throw "Récurrence d'atelier non trouvé";
 
       res.json(recurrence);
     } catch (err) {
+      console.error(err);
       res.status(400).json({ error: err });
     }
   })
@@ -140,7 +153,7 @@ const workshopRouter = Router()
     }
 
     const result = await workshopRepository.registerJobSeeker(
-      req.params.id,
+      parseInt(req.params.id),
       jobSeekerId,
     );
     if (result.error) {
@@ -168,13 +181,13 @@ const workshopRouter = Router()
     }
 
     const result = await workshopRepository.addAnimator(
-      req.params.id,
+      parseInt(req.params.id),
       advisorId,
     );
     if (result.error) {
       res.status(500).json({ error: result.error });
     } else {
-      res.status(204);
+      res.sendStatus(204);
     }
   })
 
@@ -224,13 +237,13 @@ const workshopRouter = Router()
       }
 
       const result = await workshopRepository.unregisterJobSeeker(
-        req.params.id,
+        parseInt(req.params.id),
         jobSeekerId,
       );
       if (result.error) {
         res.status(500).json({ error: result.error });
       } else {
-        res.status(204);
+        res.sendStatus(204);
       }
     },
   )
@@ -242,10 +255,11 @@ const workshopRouter = Router()
       let advisorId;
       switch (req.user.roleType) {
         case "JOB_SEEKER":
-          res.status(403).json({ error: "Forbidden on this resourceé" });
+          res.status(403).json({ error: "Forbidden on this resource" });
           return;
         case "ADVISOR":
           advisorId = req.user.advisor.advisor_id;
+          break;
         case "ADMINISTRATOR":
           if (!req.params.advisorId) {
             res.status(400).json({
@@ -263,13 +277,14 @@ const workshopRouter = Router()
       }
 
       const result = await workshopRepository.removeAnimator(
-        req.params.id,
+        parseInt(req.params.id),
         advisorId,
       );
+
       if (result.error) {
         res.status(500).json({ error: result.error });
       } else {
-        res.status(204);
+        res.sendStatus(204);
       }
     },
   );

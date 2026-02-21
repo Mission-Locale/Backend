@@ -80,21 +80,21 @@ const authRouter = Router()
     const refreshToken = req.cookies.refresh;
 
     try {
-      if (!refreshToken)
-        throw { error: "Unauthorized token not found" };
+      if (!refreshToken) throw { error: "Refresh token not found" };
       const data = jwt.verify(refreshToken, REFRESH_TOKEN_KEY);
-      if (!data) throw { error: "Unauthorized token expired" };
+      if (!data) throw { error: "Refresh token expired" };
 
-      const user = tokenRepository.find(data.key);
-      if (!user) throw { error: "Unauthorized user not found" };
+      const user = await tokenRepository.find(data.key);
+      if (!user) throw { error: "User not found" };
 
-      accessToken = await tokenRepository.generate(
+      const accessToken = await tokenRepository.generate(
         user.user_id,
         "ACCESS_TOKEN",
         5 * 60,
       );
       res.json({ token: accessToken });
     } catch (err) {
+      console.error(err);
       res.status(400).json({ error: err });
     }
   })

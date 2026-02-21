@@ -23,7 +23,6 @@ const profileRouter = Router()
       const datas = await updateUserValidator.validate(req.body, {
         abortEarly: false,
       });
-      console.log(datas);
 
       userRepository.update(user.user_id, datas);
     } catch (err) {
