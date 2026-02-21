@@ -158,7 +158,7 @@ class WorkshopRepository {
   /* register a job seeker to a recurrence */
   async registerJobSeeker(recurrenceId, jobSeekerId) {
     try {
-      const recurrence = await this.findRecurrence(recurrenceId);
+      const recurrence = await this.findRecurrence(recurrenceId, true);
 
       const registrationState =
         recurrence.registrations.length >= recurrence.maxOccupation
