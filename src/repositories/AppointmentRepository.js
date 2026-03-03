@@ -1,29 +1,29 @@
 import database from "../databases/database.js";
 import microsoftService from "./MicrosoftService.js";
-import { isBefore, addMinutes } from "date-fns";
+import { isBefore, addMinutes, addSeconds } from "date-fns";
 
 class AppointmentRepository {
   /* Create Appointment */
-  async create(data) {
-    const status = isBefore(
-      addMinutes(data.startTime, data.duration),
-      Date.now(),
-    )
-      ? "MISSED"
-      : "PENDING";
-
+  async create(startTime, duration, job_seeker_id, advisor_id = undefined) {
     try {
       const appointment = await database.appointment.create({
         data: {
-          startTime: data.startTime,
-          duration: parseInt(data.duration),
-          advisor_id: data.advisor_id,
-          job_seeker_id: data.job_seeker_id,
-          state: status,
+          startTime: startTime,
+          endTime: addSeconds(startTime, duration),
+          job_seeker_id: job_seeker_id,
+          advisor_id: advisor_id,
         },
         include: {
-          advisor: { include: { user: true } },
-          job_seeker: { include: { user: true } },
+          advisor: {
+            include: {
+              user: { select: { first_name: true, last_name: true } },
+            },
+          },
+          job_seeker: {
+            include: {
+              user: { select: { first_name: true, last_name: true } },
+            },
+          },
         },
       });
 
@@ -40,15 +40,47 @@ class AppointmentRepository {
     }
   }
 
-  async update(appointementId, newState, advisorId = undefined) {
+  async updateCancellation(appointementId, isCancelled = true) {
     try {
       return await database.appointment.update({
         where: {
           appointment_id: appointementId,
         },
         data: {
-          state: newState,
+          cancelled: isCancelled,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async updateAdvisor(appointementId, advisorId) {
+    try {
+      return await database.appointment.update({
+        where: {
+          appointment_id: appointementId,
+        },
+        data: {
           advisor_id: advisorId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async updateTime(appointementId, startTime, duration) {
+    try {
+      return await database.appointment.update({
+        where: {
+          appointment_id: appointementId,
+        },
+        data: {
+          startTime: startTime,
+          endTime: addSeconds(startTime, duration),
         },
       });
     } catch (err) {
@@ -74,6 +106,18 @@ class AppointmentRepository {
     try {
       return await database.appointment.findUnique({
         where: { appointment_id: appointementId },
+        include: {
+          advisor: {
+            include: {
+              user: { select: { first_name: true, last_name: true } },
+            },
+          },
+          job_seeker: {
+            include: {
+              user: { select: { first_name: true, last_name: true } },
+            },
+          },
+        }
       });
     } catch (err) {
       console.error(err);
@@ -99,8 +143,9 @@ class AppointmentRepository {
         where: {
           advisor_id: advisorId,
           job_seeker_id: jobSeekerId,
-          startTime: { lt: to, gte: from }, // TODO: rework model, remove duration and add endTime to improve filtering
-          state: ignoreCancelled ? { not: "CANCELLED" } : undefined,
+          startTime: { lt: to },
+          endTime: { gte: from },
+          state: ignoreCancelled ? false : undefined,
         },
       });
     } catch (err) {

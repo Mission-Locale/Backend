@@ -10,25 +10,7 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      const recurrences = await workshopRepository.findMany(...req.query);
-
-      const parsedRecurrences = recurrences.map((recurrence) => {
-        return {
-          id: recurrence.workshop_recurrence_id,
-          title: recurrence.workshop.title,
-          topic: recurrence.topic,
-          topicDescription: recurrence.topicDescription,
-          startTime: recurrence.startTime
-            ? new Date(recurrence.startTime).toISOString()
-            : null,
-          duration: recurrence.duration,
-          description: recurrence.workshop.description,
-          cardImagePath: recurrence.workshop.cardImagePath,
-          backgroundImagePath: recurrence.workshop.backgroundImagePath,
-        };
-      });
-
-      res.json(parsedRecurrences);
+      res.json(await workshopRepository.findMany(...req.query));
     } catch (err) {
       res.status(400).json({ error: err });
     }
@@ -43,28 +25,24 @@ const workshopRouter = Router()
       console.log(req.body); //TODO: complete for later
 
       try {
-        const workshopData = {
-          title: req.body.title,
-          description: req.body.description,
-        };
-        const recurrenceData = {
-          topic: req.body.topic,
-          topicDescription: req.body.topicDescription,
-          startTime: new Date(req.body.startTime),
-          maxOccupation: parseInt(req.body.maxOccupation),
-          duration: req.body.duration,
-        };
-
         // TODO: manage 2 files (images)
         if (req.file) {
           workshopData.imagePath = req.file.path;
         }
 
-        const workshop = await workshopRepository.createWithRecurrence(
-          workshopData,
-          recurrenceData,
+        res.json(
+          await workshopRepository.createWithRecurrence(
+            req.body.title,
+            req.body.description,
+            req.body.cardImagePath,
+            req.body.backgroundImagePath,
+            req.body.topic,
+            req.body.topicDescription,
+            new Date(req.body.startTime),
+            parseInt(req.body.duration),
+            parseInt(req.body.maxOccupation),
+          ),
         );
-        res.json(workshop);
       } catch (err) {
         res.status(400).json({ error: err });
       }
@@ -73,29 +51,23 @@ const workshopRouter = Router()
 
   .get("/workshops/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const workshop = await workshopRepository.find(id);
-      if (!workshop) throw "Atelier non trouvé";
-
-      res.json(workshop);
+      res.json(await workshopRepository.find(parseInt(req.params.id)));
     } catch (err) {
       res.status(400).json({ error: err });
     }
   })
   .patch("/workshops/:id", authguard, adminguard, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const workshop = await workshopRepository.update(id, req.body);
-      res.json(workshop);
+      res.json(
+        await workshopRepository.update(parseInt(req.params.id), req.body),
+      );
     } catch (err) {
       res.status(400).json({ error: err });
     }
   })
   .delete("/workshops/:id", authguard, adminguard, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const workshop = await workshopRepository.delete(id);
-      res.json(workshop);
+      res.json(await workshopRepository.delete(parseInt(req.params.id)));
     } catch (err) {
       res.status(400).json({ error: err });
     }
@@ -113,13 +85,13 @@ const workshopRouter = Router()
           listRegistration = false;
           break;
       }
-      const recurrence = await workshopRepository.findRecurrence(
-        parseInt(req.params.id),
-        listRegistration,
-      );
-      if (!recurrence) throw "Récurrence d'atelier non trouvé";
 
-      res.json(recurrence);
+      res.json(
+        await workshopRepository.findRecurrence(
+          parseInt(req.params.id),
+          listRegistration,
+        ),
+      );
     } catch (err) {
       console.error(err);
       res.status(400).json({ error: err });
