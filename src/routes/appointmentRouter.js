@@ -80,8 +80,8 @@ const appointmentRouter = Router()
     return res.json(
       await AppointmentRepository.updateTime(
         parseInt(req.params.id),
-        new Date(req.params.startTime),
-        parseInt(req.params.duration),
+        new Date(req.body.startTime),
+        parseInt(req.body.duration),
       ),
     );
   })
@@ -95,14 +95,14 @@ const appointmentRouter = Router()
     );
   })
   .patch(
-    "/appointments/:id/assign",
+    "/appointments/:id/assign/:advisorId",
     authGuard,
     adminguard,
     async (req, res) => {
       return res.json(
         await AppointmentRepository.updateAdvisor(
           parseInt(req.params.id),
-          req.body.advisorId,
+          req.params.advisorId,
         ),
       );
     },
