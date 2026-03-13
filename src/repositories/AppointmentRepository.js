@@ -1,6 +1,6 @@
 import database from "../databases/database.js";
 import microsoftService from "./MicrosoftService.js";
-import { isBefore, addMinutes, addSeconds } from "date-fns";
+import { addMinutes } from "date-fns";
 
 class AppointmentRepository {
   /* Create Appointment */
@@ -9,7 +9,7 @@ class AppointmentRepository {
       const appointment = await database.appointment.create({
         data: {
           startTime: startTime,
-          endTime: addSeconds(startTime, duration),
+          endTime: addMinutes(startTime, duration),
           job_seeker_id: job_seeker_id,
           advisor_id: advisor_id,
         },
@@ -80,7 +80,7 @@ class AppointmentRepository {
         },
         data: {
           startTime: startTime,
-          endTime: addSeconds(startTime, duration),
+          endTime: addMinutes(startTime, duration),
         },
       });
     } catch (err) {
@@ -117,7 +117,7 @@ class AppointmentRepository {
               user: { select: { first_name: true, last_name: true } },
             },
           },
-        }
+        },
       });
     } catch (err) {
       console.error(err);
@@ -145,7 +145,7 @@ class AppointmentRepository {
           job_seeker_id: jobSeekerId,
           startTime: { lt: to },
           endTime: { gte: from },
-          state: ignoreCancelled ? false : undefined,
+          cancelled: ignoreCancelled ? false : undefined,
         },
       });
     } catch (err) {

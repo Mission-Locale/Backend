@@ -1,4 +1,4 @@
-import { addSeconds } from "date-fns";
+import { addMinutes } from "date-fns";
 import database from "../databases/database.js";
 
 class WorkshopRepository {
@@ -40,7 +40,7 @@ class WorkshopRepository {
               topic,
               topicDescription,
               startTime,
-              endTime: addSeconds(startTime, duration),
+              endTime: addMinutes(startTime, duration),
               maxOccupation,
             },
           },
