@@ -5,7 +5,7 @@ model WorkshopRecurrence {
     workshop_recurrence_id Int @id @unique @default(autoincrement())
 
     startTime DateTime
-    duration  Int
+    endTime   DateTime
 
     topic            String
     topicDescription String @db.Text

@@ -1,12 +1,15 @@
+import { addMinutes } from "date-fns";
 import database from "../databases/database.js";
 
 class WorkshopRepository {
   db = database;
 
   /* Create workshop */
-  async create(data) {
+  async create(title, description, cardImagePath, backgroundImagePath) {
     try {
-      return await this.db.workshop.create({ data });
+      return await this.db.workshop.create({
+        data: { title, description, cardImagePath, backgroundImagePath },
+      });
     } catch (err) {
       console.error(err);
       return { error: err };
@@ -14,13 +17,32 @@ class WorkshopRepository {
   }
 
   /* Create workshop with event */
-  async createWithRecurrence(data, recurrenceData) {
+  async createWithRecurrence(
+    title,
+    description,
+    cardImagePath,
+    backgroundImagePath,
+    topic,
+    topicDescription,
+    startTime,
+    duration,
+    maxOccupation,
+  ) {
     try {
       return await this.db.workshop.create({
         data: {
-          ...data,
+          title,
+          description,
+          cardImagePath,
+          backgroundImagePath,
           recurrences: {
-            create: recurrenceData,
+            create: {
+              topic,
+              topicDescription,
+              startTime,
+              endTime: addMinutes(startTime, duration),
+              maxOccupation,
+            },
           },
         },
         include: {
@@ -101,10 +123,8 @@ class WorkshopRepository {
     try {
       return await this.db.workshopRecurrence.findMany({
         where: {
-          startTime: {
-            gte: from,
-            lte: to,
-          },
+          startTime: { lt: to },
+          endTime: { gte: from },
           registrations: jobSeekerId
             ? {
                 some: {

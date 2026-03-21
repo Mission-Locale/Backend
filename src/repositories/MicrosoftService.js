@@ -2,7 +2,6 @@ import "isomorphic-fetch";
 import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
-import { addMinutes } from "date-fns";
 class MicrosoftService {
   client;
   microsoftAccount = process.env.MICROSOFT_ACCOUNT;
@@ -14,13 +13,13 @@ class MicrosoftService {
     const clientSecret = new ClientSecretCredential(
       this.tenantId,
       this.clientId,
-      this.clientSecret
+      this.clientSecret,
     );
     const authProvider = new TokenCredentialAuthenticationProvider(
       clientSecret,
       {
         scopes: ["https://graph.microsoft.com/.default"],
-      }
+      },
     );
     const fetchOptions = {
       headers: { Prefer: 'outlook.timezone="Europe/Paris"' },
@@ -48,7 +47,7 @@ class MicrosoftService {
         timeZone: "UTC",
       },
       end: {
-        dateTime: addMinutes(appointment.startTime, appointment.duration),
+        dateTime: appointment.endTime,
         timeZone: "UTC",
       },
       id: appointment.id,

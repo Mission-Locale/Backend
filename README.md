@@ -91,15 +91,17 @@ Ces derniers renvoie des évènement formatés pour full calendar
 ## 🗓 Gestion des Rendez-vous
 Gestion de rendez-vous entre demandeurs et conseillers
 
-| Méthode    | Route                        | Auth                | Description                                                                |
-| ---------- | ---------------------------- | ------------------- | -------------------------------------------------------------------------- |
-| **POST**   | `/appointments`              | Advisor, Admin      | 📅 Enregistre un nouveau **rendez-vous**                                   |
-| **GET**    | `/appointments`              | Advisor, Job Seeker | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                 |
-| **GET**    | `/appointments/:id`          | Yes                 | 🔎 Récupérer un **rendez-vous** spécifique par ID                          |
-| **PATCH**  | `/appointments/:id`          | Advisor, Admin      | ✏️ Modifier un **rendez-vous** (Conseiller et État du rendez-vous)         |
-| **DELETE** | `/appointments/:id`          | Advisor, Admin      | ❌ Annuler ou supprimer un **rendez-vous**                                 |
-| **GET**    | `/appointments/registration` | Advisor, Admin      | 🔍 Récupère la liste des **rendez-vous d'inscription** en cours et futures |
-| **POST**   | `/appointments/registration` | No                  | 📅 Enregistre un nouveau **rendez-vous d'inscription**                     |
+| Méthode    | Route                                 | Auth                | Description                                                                |
+| ---------- | ------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| **POST**   | `/appointments`                       | Advisor, Admin      | 📅 Enregistre un nouveau **rendez-vous**                                   |
+| **GET**    | `/appointments`                       | Advisor, Job Seeker | 🔍 Récupérer la liste des **rendez-vous** de l'utilisateur                 |
+| **GET**    | `/appointments/:id`                   | Yes                 | 🔎 Récupérer un **rendez-vous** spécifique par ID                          |
+| **PATCH**  | `/appointments/:id`                   | Advisor, Admin      | ✏️ Modifier l'heure et la durée d'un **rendez-vous**                       |
+| **PATCH**  | `/appointments/:id/cancel`            | Advisor, Admin      | ✏️ Annule un **rendez-vous**                                               |
+| **PATCH**  | `/appointments/:id/assign/:advisorId` | Admin               | ✏️ Assigne un Conseiller à un **rendez-vous**                              |
+| **DELETE** | `/appointments/:id`                   | Advisor, Admin      | ❌ Annuler ou supprimer un **rendez-vous**                                 |
+| **GET**    | `/appointments/registration`          | Advisor, Admin      | 🔍 Récupère la liste des **rendez-vous d'inscription** en cours et futures |
+| **POST**   | `/appointments/registration`          | No                  | 📅 Enregistre un nouveau **rendez-vous d'inscription**                     |
 
 ## 👤 Gestion des conseillers
 Gestion des données du conseiller

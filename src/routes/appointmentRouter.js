@@ -1,6 +1,7 @@
 import { Router } from "express";
 import AppointmentRepository from "../repositories/AppointmentRepository.js";
 import authGuard from "../middlewares/authguard.js";
+import adminguard from "../middlewares/adminguard.js";
 
 const appointmentRouter = Router()
   .post("/appointments", authGuard, async (req, res) => {
@@ -22,7 +23,14 @@ const appointmentRouter = Router()
         break;
     }
     if (authorized) {
-      return res.json(await AppointmentRepository.create(req.body));
+      return res.json(
+        await AppointmentRepository.create(
+          new Date(req.body.startTime),
+          parseInt(req.body.duration),
+          req.body.job_seeker_id,
+          req.body.advisor_id,
+        ),
+      );
     } else {
       return res
         .status(403)
@@ -55,11 +63,13 @@ const appointmentRouter = Router()
     );
   })
   .post("/appointments/registration", async (req, res) => {
-    if (req.body.advisor_id) {
-      return res
-        .status(400)
-        .json({ error: "Registration appointment can't have an advisor!" });
-    } else return res.json(await AppointmentRepository.create(req.body));
+    return res.json(
+      await AppointmentRepository.create(
+        new Date(req.body.startTime),
+        parseInt(req.body.duration),
+        req.body.job_seeker_id,
+      ),
+    );
   })
   .get("/appointments/:id", authGuard, async (req, res) => {
     //TODO: Add security to get only his appointment (for advisor and job_seeker), unless admin
@@ -68,13 +78,35 @@ const appointmentRouter = Router()
   .patch("/appointments/:id", authGuard, async (req, res) => {
     //TODO: Add security to update only if it's the advisor's appointment or an admin
     return res.json(
-      await AppointmentRepository.update(
+      await AppointmentRepository.updateTime(
         parseInt(req.params.id),
-        req.body.state,
-        req.body.advisorId,
+        new Date(req.body.startTime),
+        parseInt(req.body.duration),
       ),
     );
   })
+  .patch("/appointments/:id/cancel", authGuard, async (req, res) => {
+    //TODO: Add security to update only if it's the advisor's appointment or an admin
+    return res.json(
+      await AppointmentRepository.updateCancellation(
+        parseInt(req.params.id),
+        true,
+      ),
+    );
+  })
+  .patch(
+    "/appointments/:id/assign/:advisorId",
+    authGuard,
+    adminguard,
+    async (req, res) => {
+      return res.json(
+        await AppointmentRepository.updateAdvisor(
+          parseInt(req.params.id),
+          req.params.advisorId,
+        ),
+      );
+    },
+  )
   .delete("/appointments/:id", authGuard, async (req, res) => {
     //TODO: Add security to delete only if it's the advisor's appointment or an admin
     await AppointmentRepository.delete(req.params.id);

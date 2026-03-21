@@ -3,10 +3,11 @@
  */
 model Appointment {
     appointment_id Int      @id @unique @default(autoincrement())
-    startTime      DateTime
-    duration       Int
 
-    state AppointmentState @default(PENDING)
+    startTime DateTime
+    endTime   DateTime
+    
+    cancelled Boolean @default(false)
 
     advisor_id    String? // No advisor => Rendez-vous d'inscription
     advisor       Advisor?  @relation("app_advisor", fields: [advisor_id], references: [advisor_id])
@@ -17,12 +18,4 @@ model Appointment {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-}
-
-// Status du rendez vous (si celui-ci est annulé, rater ou passé)
-enum AppointmentState {
-    PENDING
-    CANCELLED
-    MISSED
-    COMPLETED
 }
