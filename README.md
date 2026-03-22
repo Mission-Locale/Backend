@@ -132,6 +132,7 @@ Envoi de messages entre utilisateur et conseillé
 | **PATCH**  | `/workshops/:id`                                      | Admin          | ✏️ Modifier un **atelier**                                     |
 | **DELETE** | `/workshops/:id`                                      | Admin          | 🗑️ Supprimer un **atelier**                                    |
 | **GET**    | `/workshops/recurrences/:id`                          | No             | 🔎 Récupérer une **récurrence d'atelier** spécifique par ID    |
+| **GET**    | `/workshops/recurrences/:id/registrations`            | No             | 🔎 Récupérer une liste/nombre de personnes inscrits à une **récurrence d'atelier** |
 | **POST**   | `/workshops/recurrences/:id/register`                 | Yes            | 📝 Inscrire un **demandeur** à une **récurrence d'atelier**    |
 | **POST**   | `/workshops/recurrences/:id/animators`                | Admin, Advisor | 📝 Ajouter un **conseiller** à une **récurrence d'atelier**    |
 | **DELETE** | `/workshops/recurrences/:id/unregister/:jobSeekerId?` | Yes            | ❌ Désinscrire un **demandeur** d'une **récurrence d'atelier** |

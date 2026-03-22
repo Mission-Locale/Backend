@@ -70,20 +70,18 @@ class WorkshopRepository {
     }
   }
 
-  /* find workshop */
-  async findRecurrence(recurrenceId, includeRegistrations = false) {
+  /* find workshop recurrence */
+  // jobSeekerId: null = include, undefined = none, defined = select self state
+  async findRecurrence(recurrenceId, jobSeekerId = undefined) {
     try {
       return await this.db.workshopRecurrence.findUnique({
         where: { workshop_recurrence_id: recurrenceId },
         include: {
           workshop: true,
-          _count: !includeRegistrations && {
-            select: {
-              registrations: true,
-            },
-          },
-          registrations: includeRegistrations && {
-            include: {
+          registrations: {
+            where: jobSeekerId && { job_seeker_id: jobSeekerId },
+            select: jobSeekerId && { state: true },
+            include: jobSeekerId == null && {
               job_seeker: {
                 include: {
                   user: { omit: { password: true } },
@@ -104,6 +102,39 @@ class WorkshopRepository {
             include: {
               external_animator: true,
             },
+          },
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Count registrations by state */
+  async countRegistrations(recurrenceId) {
+    try {
+      return await this.db.registration.groupBy({
+        groupBy: ["state"],
+        where: { workshop_recurrence_id: recurrenceId },
+        _count: {
+          job_seeker_id: true,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return { error: err };
+    }
+  }
+
+  /* Return registrations */
+  async findRegistrations(recurrenceId) {
+    try {
+      return await this.db.registration.findMany({
+        where: { workshop_recurrence_id: recurrenceId },
+        include: {
+          job_seeker: {
+            select: { user: { select: { first_name: true, last_name: true } } },
           },
         },
       });

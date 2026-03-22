@@ -75,21 +75,24 @@ const workshopRouter = Router()
 
   .get("/workshops/recurrences/:id", optionalauth, async (req, res) => {
     try {
-      let listRegistration;
+      let jobSeekerId;
       switch (req.user?.roleType) {
         case "ADVISOR":
         case "ADMINISTRATOR":
-          listRegistration = true;
+          jobSeekerId = null;
+          break;
+        case "JOB_SEEKER":
+          jobSeekerId = req.user.job_seeker_id;
           break;
         default:
-          listRegistration = false;
+          jobSeekerId = undefined;
           break;
       }
 
       res.json(
         await workshopRepository.findRecurrence(
           parseInt(req.params.id),
-          listRegistration,
+          jobSeekerId,
         ),
       );
     } catch (err) {
@@ -97,6 +100,34 @@ const workshopRouter = Router()
       res.status(400).json({ error: err });
     }
   })
+
+  .get(
+    "/workshops/recurrences/:id/registrations",
+    optionalauth,
+    async (req, res) => {
+      try {
+        let response;
+        switch (req.user?.roleType) {
+          case "ADVISOR":
+          case "ADMINISTRATOR":
+            response = await workshopRepository.findRegistrations(
+              parseInt(req.params.id),
+            );
+            break;
+          default:
+            response = await workshopRepository.countRegistrations(
+              parseInt(req.params.id),
+            );
+            break;
+        }
+
+        res.json(response);
+      } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err });
+      }
+    },
+  )
 
   .post("/workshops/recurrences/:id/register", authguard, async (req, res) => {
     let jobSeekerId;
