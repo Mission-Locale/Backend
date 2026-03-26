@@ -73,22 +73,34 @@ class WorkshopRepository {
   /* find workshop recurrence */
   // jobSeekerId: null = include, undefined = none, defined = select self state
   async findRecurrence(recurrenceId, jobSeekerId = undefined) {
+    let registrationRequest;
+    if (jobSeekerId) {
+      // Job Seeker
+      registrationRequest = {
+        where: { job_seeker_id: jobSeekerId },
+        select: { state: true },
+      };
+    } else if (jobSeekerId == null) {
+      // Admin & Advisor
+      registrationRequest = {
+        include: {
+          job_seeker: {
+            include: {
+              user: { omit: { password: true } },
+            },
+          },
+        },
+      };
+    } else {
+      // Public
+      registrationRequest = undefined;
+    }
     try {
       return await this.db.workshopRecurrence.findUnique({
         where: { workshop_recurrence_id: recurrenceId },
         include: {
           workshop: true,
-          registrations: {
-            where: jobSeekerId && { job_seeker_id: jobSeekerId },
-            select: jobSeekerId && { state: true },
-            include: jobSeekerId == null && {
-              job_seeker: {
-                include: {
-                  user: { omit: { password: true } },
-                },
-              },
-            },
-          },
+          registrations: registrationRequest,
           animators: {
             include: {
               advisor: {

@@ -73,7 +73,7 @@ const appointmentRouter = Router()
   })
   .get("/appointments/:id", authGuard, async (req, res) => {
     //TODO: Add security to get only his appointment (for advisor and job_seeker), unless admin
-    return res.json(await AppointmentRepository.get(req.params.id));
+    return res.json(await AppointmentRepository.get(parseInt(req.params.id)));
   })
   .patch("/appointments/:id", authGuard, async (req, res) => {
     //TODO: Add security to update only if it's the advisor's appointment or an admin
