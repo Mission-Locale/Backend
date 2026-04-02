@@ -12,7 +12,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -51,7 +51,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -66,7 +66,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -119,7 +119,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -127,7 +127,7 @@ class WorkshopRepository {
   async countRegistrations(recurrenceId) {
     try {
       return await this.db.registration.groupBy({
-        groupBy: ["state"],
+        by: ["state"],
         where: { workshop_recurrence_id: recurrenceId },
         _count: {
           job_seeker_id: true,
@@ -135,7 +135,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -152,7 +152,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -189,7 +189,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -202,7 +202,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -214,14 +214,14 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
   /* register a job seeker to a recurrence */
   async registerJobSeeker(recurrenceId, jobSeekerId) {
     try {
-      const recurrence = await this.findRecurrence(recurrenceId, true);
+      const recurrence = await this.findRecurrence(recurrenceId, jobSeekerId);
 
       const registrationState =
         recurrence.registrations.length >= recurrence.maxOccupation
@@ -236,7 +236,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -249,7 +249,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -262,7 +262,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -277,7 +277,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -292,7 +292,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -307,7 +307,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 }
