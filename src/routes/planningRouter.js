@@ -4,7 +4,7 @@ import AppointmentRepository from "../repositories/AppointmentRepository.js";
 import WorkshopRepository from "../repositories/WorkshopRepository.js";
 import authGuard from "../middlewares/authguard.js";
 import adminGuard from "../middlewares/adminguard.js";
-import { addMinutes } from "date-fns";
+import { addMonths } from "date-fns";
 
 function mapAppointmentToCalendarEvent(appointment) {
   return {
@@ -71,6 +71,18 @@ const planningRouter = Router()
     return res.json(
       (await AppointmentRepository.getAll(null, undefined, new Date())).map(
         mapAppointmentToCalendarEvent,
+      ),
+    );
+  })
+  .get("/planning/workshop", async (req, res) => {
+    const from = new Date();
+    from.setDate(0);
+    const to = addMonths(new Date(), 1);
+    to.setDate(0);
+
+    return res.json(
+      (await WorkshopRepository.findMany(undefined, undefined, from, to)).map(
+        mapWorkshopReccurenceToCalendarEvent,
       ),
     );
   })
