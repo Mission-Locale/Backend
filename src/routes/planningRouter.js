@@ -11,7 +11,7 @@ function mapAppointmentToCalendarEvent(appointment) {
     id: appointment.appointment_id,
     timeZone: "UTC",
     start: appointment.startTime,
-    end: addMinutes(appointment.startTime, appointment.duration),
+    end: appointment.endTime,
     title: "Rendez-vous", // TODO add names
     color: "blue",
     extendedProps: {
@@ -26,7 +26,7 @@ function mapWorkshopReccurenceToCalendarEvent(workshopReccurence) {
     id: workshopReccurence.workshop_recurrence_id,
     timeZone: "UTC",
     start: workshopReccurence.startTime,
-    end: addMinutes(workshopReccurence.startTime, workshopReccurence.duration),
+    end: workshopReccurence.endTime,
     title: workshopReccurence.topic,
     color: "purple",
     extendedProps: {

@@ -13,17 +13,21 @@ const userRepository = UserRepository;
  * @param {NextFunction} next - Next stage of the request
  */
 async function optionalAuth(req, res, next) {
-  const accessToken = req.headers["authorization"]?.split(" ")[1];
-  const refreshToken = req.cookies.refresh;
-  if (!accessToken || !refreshToken) return;
+  try {
+    const accessToken = req.headers["authorization"]?.split(" ")[1];
+    const refreshToken = req.cookies.refresh;
+    if (!accessToken || !refreshToken) return next();
 
-  const data = jwt.verify(accessToken, ACCESS_TOKEN_KEY);
-  if (!data) return;
+    const data = jwt.verify(accessToken, ACCESS_TOKEN_KEY);
+    if (!data) return next();
 
-  const user = await userRepository.find(data.key);
-  if (!user) return;
+    const user = await userRepository.find(data.key);
+    if (!user) return next();
 
-  req.user = user;
+    req.user = user;
+  } catch (err) {
+    // Ignored
+  }
   return next();
 }
 
