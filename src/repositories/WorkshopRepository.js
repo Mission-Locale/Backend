@@ -12,7 +12,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -51,7 +51,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -66,31 +66,41 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
-  /* find workshop */
-  async findRecurrence(recurrenceId, includeRegistrations = false) {
+  /* find workshop recurrence */
+  // jobSeekerId: null = include, undefined = none, defined = select self state
+  async findRecurrence(recurrenceId, jobSeekerId = undefined) {
+    let registrationRequest;
+    if (jobSeekerId) {
+      // Job Seeker
+      registrationRequest = {
+        where: { job_seeker_id: jobSeekerId },
+        select: { state: true },
+      };
+    } else if (jobSeekerId == null) {
+      // Admin & Advisor
+      registrationRequest = {
+        include: {
+          job_seeker: {
+            include: {
+              user: { omit: { password: true } },
+            },
+          },
+        },
+      };
+    } else {
+      // Public
+      registrationRequest = undefined;
+    }
     try {
       return await this.db.workshopRecurrence.findUnique({
         where: { workshop_recurrence_id: recurrenceId },
         include: {
           workshop: true,
-          _count: !includeRegistrations && {
-            select: {
-              registrations: true,
-            },
-          },
-          registrations: includeRegistrations && {
-            include: {
-              job_seeker: {
-                include: {
-                  user: { omit: { password: true } },
-                },
-              },
-            },
-          },
+          registrations: registrationRequest,
           animators: {
             include: {
               advisor: {
@@ -109,7 +119,40 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
+    }
+  }
+
+  /* Count registrations by state */
+  async countRegistrations(recurrenceId) {
+    try {
+      return await this.db.registration.groupBy({
+        by: ["state"],
+        where: { workshop_recurrence_id: recurrenceId },
+        _count: {
+          job_seeker_id: true,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      throw { error: err };
+    }
+  }
+
+  /* Return registrations */
+  async findRegistrations(recurrenceId) {
+    try {
+      return await this.db.registration.findMany({
+        where: { workshop_recurrence_id: recurrenceId },
+        include: {
+          job_seeker: {
+            select: { user: { select: { first_name: true, last_name: true } } },
+          },
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      throw { error: err };
     }
   }
 
@@ -146,7 +189,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -159,7 +202,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -171,14 +214,14 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
   /* register a job seeker to a recurrence */
   async registerJobSeeker(recurrenceId, jobSeekerId) {
     try {
-      const recurrence = await this.findRecurrence(recurrenceId, true);
+      const recurrence = await this.findRecurrence(recurrenceId, jobSeekerId);
 
       const registrationState =
         recurrence.registrations.length >= recurrence.maxOccupation
@@ -193,7 +236,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -206,7 +249,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -219,7 +262,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -234,7 +277,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -249,7 +292,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 
@@ -264,7 +307,7 @@ class WorkshopRepository {
       });
     } catch (err) {
       console.error(err);
-      return { error: err };
+      throw { error: err };
     }
   }
 }
