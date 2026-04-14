@@ -46,7 +46,13 @@ async function getAppointmentAndWorkshopForJobSeeker(
       await AppointmentRepository.getAll(undefined, jobSeekerId, from, to)
     ).map(mapAppointmentToCalendarEvent),
     ...(
-      await WorkshopRepository.findMany(undefined, jobSeekerId, from, to)
+      await WorkshopRepository.findMany(
+        undefined,
+        undefined,
+        jobSeekerId,
+        from,
+        to,
+      )
     ).map(mapWorkshopReccurenceToCalendarEvent),
   ];
 }
@@ -60,9 +66,15 @@ async function getAppointmentAndWorkshopForAdvisor(
     ...(await AppointmentRepository.getAll(advisorId, undefined, from, to)).map(
       mapAppointmentToCalendarEvent,
     ),
-    ...(await WorkshopRepository.findMany(advisorId, undefined, from, to)).map(
-      mapWorkshopReccurenceToCalendarEvent,
-    ),
+    ...(
+      await WorkshopRepository.findMany(
+        undefined,
+        advisorId,
+        undefined,
+        from,
+        to,
+      )
+    ).map(mapWorkshopReccurenceToCalendarEvent),
   ];
 }
 
@@ -81,9 +93,15 @@ const planningRouter = Router()
     to.setDate(1);
 
     return res.json(
-      (await WorkshopRepository.findMany(undefined, undefined, from, to)).map(
-        mapWorkshopReccurenceToCalendarEvent,
-      ),
+      (
+        await WorkshopRepository.findMany(
+          undefined,
+          undefined,
+          undefined,
+          from,
+          to,
+        )
+      ).map(mapWorkshopReccurenceToCalendarEvent),
     );
   })
   .get("/planning/me", authGuard, async (req, res) => {

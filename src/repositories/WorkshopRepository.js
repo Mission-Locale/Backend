@@ -158,6 +158,7 @@ class WorkshopRepository {
 
   /* find workshop recurrences */
   async findMany(
+    workshopId = undefined,
     advisorId = undefined,
     jobSeekerId = undefined,
     from = undefined,
@@ -166,6 +167,7 @@ class WorkshopRepository {
     try {
       return await this.db.workshopRecurrence.findMany({
         where: {
+          workshop_id: workshopId,
           startTime: { lt: to },
           endTime: { gte: from },
           registrations: jobSeekerId
