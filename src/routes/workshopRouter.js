@@ -33,17 +33,12 @@ const workshopRouter = Router()
       console.log(req.body); //TODO: complete for later
 
       try {
-        // TODO: manage 2 files (images)
-        if (req.file) {
-          workshopData.imagePath = req.file.path;
-        }
-
         res.json(
           await workshopRepository.createWithRecurrence(
             req.body.title,
             req.body.description,
-            req.body.cardImagePath,
-            req.body.backgroundImagePath,
+            req.files?.cardImage?.path,
+            req.files?.backgroundImage?.path,
             req.body.topic,
             req.body.topicDescription,
             new Date(req.body.startTime),

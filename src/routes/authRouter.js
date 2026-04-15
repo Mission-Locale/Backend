@@ -30,7 +30,7 @@ const authRouter = Router()
       delete validatedData.confirm_password;
 
       if (req.file) {
-        validatedData.inscriptionFilePath = req.file.path;
+        validatedData.inscriptionFilePath = req.file.path; // TODO: seems unused
       }
       const data = await userRepository.create(validatedData);
       if (data.error) throw { error: data.error };

@@ -21,7 +21,7 @@ class UserRepository {
           ...(data.roleType === "ADVISOR" && {
             advisor: {
               create: {
-                ...(profile_picture_path && { profile_picture_path }),
+                ...(profile_picture_path && { profile_picture_path }), // TODO: seems unused
               },
             },
           }),
