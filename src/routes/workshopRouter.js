@@ -10,7 +10,15 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      res.json(await workshopRepository.findMany(...req.query));
+      res.json(
+        await workshopRepository.findMany(
+          parseInt(req.query.workshopId),
+          req.query.advisorId,
+          req.query.jobSeekerId,
+          req.query.from ? new Date(parseInt(req.query.from)) : undefined,
+          req.query.to ? new Date(parseInt(req.query.to)) : undefined,
+        ),
+      );
     } catch (err) {
       res.status(400).json({ error: err });
     }
