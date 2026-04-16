@@ -89,8 +89,8 @@ const planningRouter = Router()
   .get("/planning/workshop", async (req, res) => {
     const from = new Date();
     from.setDate(1);
-    const to = addMonths(new Date(), 1);
-    to.setDate(1);
+    const to = addMonths(new Date(), 2);
+    to.setDate(0);
 
     return res.json(
       (
