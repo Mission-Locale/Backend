@@ -9,7 +9,6 @@ const profileRouter = Router()
     const user = req.user;
     if (user) {
       delete user.password;
-      delete user.user_id;
 
       res.json(req.user);
     } else {
