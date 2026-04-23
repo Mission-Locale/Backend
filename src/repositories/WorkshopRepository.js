@@ -78,7 +78,7 @@ class WorkshopRepository {
       if (user.role == "JOB_SEEKER") {
         // Job Seeker
         registrationRequest = {
-          where: { job_seeker: { user_id: userId } },
+          where: { job_seeker: { user_id: user.user_id } },
           select: { state: true },
         };
       } else {
