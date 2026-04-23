@@ -10,7 +10,15 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      res.json(await workshopRepository.findMany(...req.query));
+      res.json(
+        await workshopRepository.findMany(
+          parseInt(req.query.workshopId),
+          req.query.advisorId,
+          req.query.jobSeekerId,
+          req.query.from ? new Date(parseInt(req.query.from)) : undefined,
+          req.query.to ? new Date(parseInt(req.query.to)) : undefined,
+        ),
+      );
     } catch (err) {
       res.status(400).json({ error: err });
     }
@@ -25,17 +33,12 @@ const workshopRouter = Router()
       console.log(req.body); //TODO: complete for later
 
       try {
-        // TODO: manage 2 files (images)
-        if (req.file) {
-          workshopData.imagePath = req.file.path;
-        }
-
         res.json(
           await workshopRepository.createWithRecurrence(
             req.body.title,
             req.body.description,
-            req.body.cardImagePath,
-            req.body.backgroundImagePath,
+            req.files?.cardImage?.path,
+            req.files?.backgroundImage?.path,
             req.body.topic,
             req.body.topicDescription,
             new Date(req.body.startTime),
@@ -75,24 +78,10 @@ const workshopRouter = Router()
 
   .get("/workshops/recurrences/:id", optionalauth, async (req, res) => {
     try {
-      let jobSeekerId;
-      switch (req.user?.roleType) {
-        case "ADVISOR":
-        case "ADMINISTRATOR":
-          jobSeekerId = null;
-          break;
-        case "JOB_SEEKER":
-          jobSeekerId = req.user.job_seeker_id;
-          break;
-        default:
-          jobSeekerId = undefined;
-          break;
-      }
-
       res.json(
         await workshopRepository.findRecurrence(
           parseInt(req.params.id),
-          jobSeekerId,
+          req.user,
         ),
       );
     } catch (err) {
@@ -130,34 +119,30 @@ const workshopRouter = Router()
   )
 
   .post("/workshops/recurrences/:id/register", authguard, async (req, res) => {
-    let jobSeekerId;
-    switch (req.user.roleType) {
-      case "JOB_SEEKER":
-        jobSeekerId = req.user.jobSeeker.job_seeker_id;
-        break;
-      case "ADVISOR":
-        const jobSeeker = await JobSeekerRepository.find(req.body.jobSeekerId);
-        if (jobSeeker.assigned_advisor_id != req.user.advisor.advisor_id) {
-          res
-            .status(403)
-            .json({ error: "Le demandeur indiqué ne vous est pas assigné" });
-          return;
-        } else {
-          jobSeekerId = jobSeeker.job_seeker_id;
-          break;
-        }
-      case "ADMINISTRATOR":
-        jobSeekerId = req.body.jobSeekerId;
-        break;
-      default:
-        console.error("Unknown role type : " + req.user.roleType);
-        res.status(403).json({ error: "Forbidden on this resource" });
-        return;
+    const jobSeeker = await JobSeekerRepository.find(
+      req.user.roleType == "JOB_SEEKER"
+        ? req.user.jobSeeker.job_seeker_id
+        : req.body.jobSeekerId,
+    );
+
+    if (!jobSeeker) {
+      res.status(404).json({ error: "Le demandeur indiqué n'existe pas" });
+      return;
+    }
+
+    if (
+      req.user.roleType == "ADVISOR" &&
+      jobSeeker.assigned_advisor_id != req.user.advisor.advisor_id
+    ) {
+      res
+        .status(403)
+        .json({ error: "Le demandeur indiqué ne vous est pas assigné" });
+      return;
     }
 
     const result = await workshopRepository.registerJobSeeker(
       parseInt(req.params.id),
-      jobSeekerId,
+      jobSeeker,
     );
     if (result.error) {
       res.status(500).json({ error: result.error });
@@ -170,10 +155,11 @@ const workshopRouter = Router()
     let advisorId;
     switch (req.user.roleType) {
       case "JOB_SEEKER":
-        res.status(403).json({ error: "Forbidden on this resourceé" });
+        res.status(403).json({ error: "Forbidden on this resource" });
         return;
       case "ADVISOR":
         advisorId = req.user.advisor.advisor_id;
+        break;
       case "ADMINISTRATOR":
         advisorId = req.body.advisorId;
         break;

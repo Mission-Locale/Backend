@@ -83,6 +83,7 @@ Ces derniers renvoie des évènement formatés pour full calendar
 | Méthode    | Route                               | Auth  | Description                                                                        |
 | ---------- | ----------------------------------- | ----- | ---------------------------------------------------------------------------------- |
 | **GET**    | `/planning/registration`            | Admin | 🔍 Récupère le planning des **rendez-vous d'inscription** en cours et futures      |
+| **GET**    | `/planning/workshop`                | No    | 🔍 Récupère le planning des **ateliers** du mois actuel et suivant                 |
 | **GET**    | `/planning/me`                      | Yes   | 🔍 Récupérer le planning des **rendez-vous et ateliers** de l'utilisateur connecté (l'adminstrateur récupèrera le planning d'inscription) |
 | **GET**    | `/planning/advisor/:advisorId`      | Admin | 🔍 Récupérer le planning des **rendez-vous et ateliers** du conseiller             |
 | **GET**    | `/planning/job-seeker/:jobSeekerId` | Admin | 🔍 Récupérer le planning des **rendez-vous et ateliers** du demandeur d'emploi     |

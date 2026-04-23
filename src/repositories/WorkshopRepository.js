@@ -71,26 +71,29 @@ class WorkshopRepository {
   }
 
   /* find workshop recurrence */
-  // jobSeekerId: null = include, undefined = none, defined = select self state
-  async findRecurrence(recurrenceId, jobSeekerId = undefined) {
+  async findRecurrence(recurrenceId, user = undefined) {
+    let includeUserIds = false;
     let registrationRequest;
-    if (jobSeekerId) {
-      // Job Seeker
-      registrationRequest = {
-        where: { job_seeker_id: jobSeekerId },
-        select: { state: true },
-      };
-    } else if (jobSeekerId == null) {
-      // Admin & Advisor
-      registrationRequest = {
-        include: {
-          job_seeker: {
-            include: {
-              user: { omit: { password: true } },
+    if (user) {
+      if (user.role == "JOB_SEEKER") {
+        // Job Seeker
+        registrationRequest = {
+          where: { job_seeker: { user_id: user.user_id } },
+          select: { state: true },
+        };
+      } else {
+        // Admin & Advisor
+        includeUserIds = true;
+        registrationRequest = {
+          include: {
+            job_seeker: {
+              include: {
+                user: { omit: { password: true } },
+              },
             },
           },
-        },
-      };
+        };
+      }
     } else {
       // Public
       registrationRequest = undefined;
@@ -105,7 +108,13 @@ class WorkshopRepository {
             include: {
               advisor: {
                 select: {
-                  user: { select: { first_name: true, last_name: true } },
+                  user: {
+                    select: {
+                      first_name: true,
+                      last_name: true,
+                      user_id: includeUserIds,
+                    },
+                  },
                 },
               },
             },
@@ -158,6 +167,7 @@ class WorkshopRepository {
 
   /* find workshop recurrences */
   async findMany(
+    workshopId = undefined,
     advisorId = undefined,
     jobSeekerId = undefined,
     from = undefined,
@@ -166,6 +176,7 @@ class WorkshopRepository {
     try {
       return await this.db.workshopRecurrence.findMany({
         where: {
+          workshop_id: workshopId,
           startTime: { lt: to },
           endTime: { gte: from },
           registrations: jobSeekerId
@@ -219,9 +230,12 @@ class WorkshopRepository {
   }
 
   /* register a job seeker to a recurrence */
-  async registerJobSeeker(recurrenceId, jobSeekerId) {
+  async registerJobSeeker(recurrenceId, jobSeeker) {
     try {
-      const recurrence = await this.findRecurrence(recurrenceId, jobSeekerId);
+      const recurrence = await this.findRecurrence(
+        recurrenceId,
+        jobSeeker.user,
+      );
 
       const registrationState =
         recurrence.registrations.length >= recurrence.maxOccupation
@@ -230,7 +244,7 @@ class WorkshopRepository {
       return await this.db.registration.create({
         data: {
           state: registrationState,
-          job_seeker_id: jobSeekerId,
+          job_seeker_id: jobSeeker.job_seeker_id,
           workshop_recurrence_id: recurrenceId,
         },
       });
@@ -244,8 +258,10 @@ class WorkshopRepository {
   async addAnimator(recurrenceId, advisorId) {
     try {
       return await this.db.animator.create({
-        advisor_id: advisorId,
-        workshop_recurrence_id: recurrenceId,
+        data: {
+          advisor_id: advisorId,
+          workshop_recurrence_id: recurrenceId,
+        },
       });
     } catch (err) {
       console.error(err);
@@ -257,8 +273,10 @@ class WorkshopRepository {
   async addExternalAnimator(recurrenceId, animatorId) {
     try {
       return await this.db.coAnimator.create({
-        external_animator_id: animatorId,
-        workshop_recurrence_id: recurrenceId,
+        data: {
+          external_animator_id: animatorId,
+          workshop_recurrence_id: recurrenceId,
+        },
       });
     } catch (err) {
       console.error(err);

@@ -4,7 +4,7 @@ import AppointmentRepository from "../repositories/AppointmentRepository.js";
 import WorkshopRepository from "../repositories/WorkshopRepository.js";
 import authGuard from "../middlewares/authguard.js";
 import adminGuard from "../middlewares/adminguard.js";
-import { addMinutes } from "date-fns";
+import { addMonths } from "date-fns";
 
 function mapAppointmentToCalendarEvent(appointment) {
   return {
@@ -46,7 +46,13 @@ async function getAppointmentAndWorkshopForJobSeeker(
       await AppointmentRepository.getAll(undefined, jobSeekerId, from, to)
     ).map(mapAppointmentToCalendarEvent),
     ...(
-      await WorkshopRepository.findMany(undefined, jobSeekerId, from, to)
+      await WorkshopRepository.findMany(
+        undefined,
+        undefined,
+        jobSeekerId,
+        from,
+        to,
+      )
     ).map(mapWorkshopReccurenceToCalendarEvent),
   ];
 }
@@ -60,9 +66,15 @@ async function getAppointmentAndWorkshopForAdvisor(
     ...(await AppointmentRepository.getAll(advisorId, undefined, from, to)).map(
       mapAppointmentToCalendarEvent,
     ),
-    ...(await WorkshopRepository.findMany(advisorId, undefined, from, to)).map(
-      mapWorkshopReccurenceToCalendarEvent,
-    ),
+    ...(
+      await WorkshopRepository.findMany(
+        undefined,
+        advisorId,
+        undefined,
+        from,
+        to,
+      )
+    ).map(mapWorkshopReccurenceToCalendarEvent),
   ];
 }
 
@@ -72,6 +84,24 @@ const planningRouter = Router()
       (await AppointmentRepository.getAll(null, undefined, new Date())).map(
         mapAppointmentToCalendarEvent,
       ),
+    );
+  })
+  .get("/planning/workshop", async (req, res) => {
+    const from = new Date();
+    from.setDate(1);
+    const to = addMonths(new Date(), 2);
+    to.setDate(0);
+
+    return res.json(
+      (
+        await WorkshopRepository.findMany(
+          undefined,
+          undefined,
+          undefined,
+          from,
+          to,
+        )
+      ).map(mapWorkshopReccurenceToCalendarEvent),
     );
   })
   .get("/planning/me", authGuard, async (req, res) => {
