@@ -105,10 +105,19 @@ Gestion de rendez-vous entre demandeurs et conseillers
 | **POST**   | `/appointments/registration`          | No                  | 📅 Enregistre un nouveau **rendez-vous d'inscription**                     |
 
 ## 👤 Gestion des conseillers
-Gestion des données du conseiller
+Gestion des données des conseillers
 | Méthode | Route                   | Auth    | Description                                                                              |
 | ------- | ----------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| **GET** | `/advisors`             | Admin   | 🔍 Récupérer la liste des **conseillers** _(filtrable)_                                  |
 | **GET** | `/advisors/job-seekers` | Advisor | 🔍 Récupérer la liste des **demandeurs d'emploi** assignés à ce conseiller _(filtrable)_ |
+
+## 👤 Gestion des animateurs externes
+Gestion des données des animateurs externes
+| Méthode  | Route                     | Auth    | Description                                                    |
+| -------- | ------------------------- | ------- | -------------------------------------------------------------- |
+| **POST** | `/external-animators`     | Admin   | 📝 Enregistre un nouveau **animateurs externe**                |
+| **GET**  | `/external-animators`     | Admin   | 🔍 Récupére la liste des **animateurs externes** _(filtrable)_ |
+| **GET**  | `/external-animators/:id` | Admin   | 🔎 Récupére les données d'un **animateur externe**             |
 
 
 ## 💬 Gestion des Messages (**Inexistant**)
@@ -125,19 +134,21 @@ Envoi de messages entre utilisateur et conseillé
 
 ### Gestion des Ateliers (événements récurrents)
 
-| Méthode    | Route                                                 | Auth           | Description                                                    |
-| ---------- | ----------------------------------------------------- | -------------- | -------------------------------------------------------------- |
-| **POST**   | `/workshops`                                          | Admin          | 📝 Créer un nouvel **atelier** (événement récurrent)           |
-| **GET**    | `/workshops`                                          | No             | 🔍 Récupérer la liste de tous les **atelier**                  |
-| **GET**    | `/workshops/:id`                                      | No             | 🔎 Récupérer un **atelier** spécifique par ID                  |
-| **PATCH**  | `/workshops/:id`                                      | Admin          | ✏️ Modifier un **atelier**                                     |
-| **DELETE** | `/workshops/:id`                                      | Admin          | 🗑️ Supprimer un **atelier**                                    |
-| **GET**    | `/workshops/recurrences/:id`                          | No             | 🔎 Récupérer une **récurrence d'atelier** spécifique par ID    |
-| **GET**    | `/workshops/recurrences/:id/registrations`            | No             | 🔎 Récupérer une liste/nombre de personnes inscrits à une **récurrence d'atelier** |
-| **POST**   | `/workshops/recurrences/:id/register`                 | Yes            | 📝 Inscrire un **demandeur** à une **récurrence d'atelier**    |
-| **POST**   | `/workshops/recurrences/:id/animators`                | Admin, Advisor | 📝 Ajouter un **conseiller** à une **récurrence d'atelier**    |
-| **DELETE** | `/workshops/recurrences/:id/unregister/:jobSeekerId?` | Yes            | ❌ Désinscrire un **demandeur** d'une **récurrence d'atelier** |
-| **DELETE** | `/workshops/recurrences/:id/animators/:advisorId?`    | Admin, Advisor | ❌ Retirer un **conseiller** d'une **récurrence d'atelier**    |
+| Méthode    | Route                                                        | Auth           | Description                                                                |
+| ---------- | ------------------------------------------------------------ | -------------- | -------------------------------------------------------------------------- |
+| **POST**   | `/workshops`                                                 | Admin          | 📝 Créer un nouvel **atelier** (événement récurrent)                       |
+| **GET**    | `/workshops`                                                 | No             | 🔍 Récupérer la liste de tous les **atelier**                              |
+| **GET**    | `/workshops/:id`                                             | No             | 🔎 Récupérer un **atelier** spécifique par ID                              |
+| **PATCH**  | `/workshops/:id`                                             | Admin          | ✏️ Modifier un **atelier**                                                 |
+| **DELETE** | `/workshops/:id`                                             | Admin          | 🗑️ Supprimer un **atelier**                                                |
+| **GET**    | `/workshops/recurrences/:id`                                 | No             | 🔎 Récupérer une **récurrence d'atelier** spécifique par ID                |
+| **GET**    | `/workshops/recurrences/:id/registrations`                   | No             | 🔎 Récupérer une liste/nombre de personnes inscrits à une **récurrence d'atelier** |
+| **POST**   | `/workshops/recurrences/:id/register`                        | Yes            | 📝 Inscrire un **demandeur** à une **récurrence d'atelier**                |
+| **POST**   | `/workshops/recurrences/:id/animators`                       | Admin, Advisor | 📝 Ajouter un **conseiller** à une **récurrence d'atelier**                |
+| **POST**   | `/workshops/recurrences/:id/external-animators/:animatorId?` | Admin          | 📝 Ajoute un **animateur externe** existant à une **récurrence d'atelier** |
+| **DELETE** | `/workshops/recurrences/:id/unregister/:jobSeekerId?`        | Yes            | ❌ Désinscrire un **demandeur** d'une **récurrence d'atelier**             |
+| **DELETE** | `/workshops/recurrences/:id/animators/:advisorId?`           | Admin, Advisor | ❌ Retire un **conseiller** d'une **récurrence d'atelier**                 |
+| **DELETE** | `/workshops/recurrences/:id/external-animators/:animatorId?` | Admin          | ❌ Retire un **animateur externe** d'une **récurrence d'atelier**          |
 
 ---
 

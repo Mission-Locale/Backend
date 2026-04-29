@@ -70,6 +70,39 @@ class WorkshopRepository {
     }
   }
 
+  /* find workshops */
+  async findMany({
+    limit = 10,
+    page = 1,
+    name = undefined,
+    order = "asc",
+  } = {}) {
+    const where = name
+      ? { title: { contains: name.toLowerCase() } }
+      : undefined;
+    try {
+      const count = this.db.workshop.count(where);
+      if (count == 0) {
+        return { count };
+      } else
+        return {
+          workshops: await this.db.workshop.findMany({
+            where,
+            include: {
+              recurrences: true,
+            },
+            orderBy: { createdAt: order },
+            skip: (page - 1) * limit,
+            take: limit,
+          }),
+          count,
+        };
+    } catch (err) {
+      console.error(err);
+      throw { error: err };
+    }
+  }
+
   /* find workshop recurrence */
   async findRecurrence(recurrenceId, user = undefined) {
     let includeUserIds = false;
@@ -166,7 +199,7 @@ class WorkshopRepository {
   }
 
   /* find workshop recurrences */
-  async findMany(
+  async findRecurrences(
     workshopId = undefined,
     advisorId = undefined,
     jobSeekerId = undefined,
@@ -275,6 +308,26 @@ class WorkshopRepository {
       return await this.db.coAnimator.create({
         data: {
           external_animator_id: animatorId,
+          workshop_recurrence_id: recurrenceId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      throw { error: err };
+    }
+  }
+
+  /* Create an external animator and add it to a recurrence */
+  async createExternalAnimator(recurrenceId, lastName, firstName) {
+    try {
+      return await this.db.coAnimator.create({
+        data: {
+          external_animator: {
+            create: {
+              firstName: firstName,
+              lastName: lastName,
+            },
+          },
           workshop_recurrence_id: recurrenceId,
         },
       });

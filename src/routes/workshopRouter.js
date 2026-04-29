@@ -10,15 +10,7 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      res.json(
-        await workshopRepository.findMany(
-          parseInt(req.query.workshopId),
-          req.query.advisorId,
-          req.query.jobSeekerId,
-          req.query.from ? new Date(parseInt(req.query.from)) : undefined,
-          req.query.to ? new Date(parseInt(req.query.to)) : undefined,
-        ),
-      );
+      res.json(await workshopRepository.findMany(req.query));
     } catch (err) {
       res.status(400).json({ error: err });
     }
@@ -71,6 +63,22 @@ const workshopRouter = Router()
   .delete("/workshops/:id", authguard, adminguard, async (req, res) => {
     try {
       res.json(await workshopRepository.delete(parseInt(req.params.id)));
+    } catch (err) {
+      res.status(400).json({ error: err });
+    }
+  })
+
+  .get("/workshops/recurrences", async (req, res) => {
+    try {
+      res.json(
+        await workshopRepository.findRecurrences(
+          parseInt(req.query.workshopId),
+          req.query.advisorId,
+          req.query.jobSeekerId,
+          req.query.from ? new Date(parseInt(req.query.from)) : undefined,
+          req.query.to ? new Date(parseInt(req.query.to)) : undefined,
+        ),
+      );
     } catch (err) {
       res.status(400).json({ error: err });
     }
@@ -180,6 +188,23 @@ const workshopRouter = Router()
     }
   })
 
+  .post(
+    "/workshops/recurrences/:id/external-animators/:animatorId",
+    authguard,
+    adminguard,
+    async (req, res) => {
+      const result = await workshopRepository.addExternalAnimator(
+        parseInt(req.params.id),
+        req.params.animatorId,
+      );
+      if (result.error) {
+        res.status(500).json({ error: result.error });
+      } else {
+        res.sendStatus(204);
+      }
+    },
+  )
+
   .delete(
     "/workshops/recurrences/:id/unregister/:jobSeekerId?",
     authguard,
@@ -268,6 +293,23 @@ const workshopRouter = Router()
       const result = await workshopRepository.removeAnimator(
         parseInt(req.params.id),
         advisorId,
+      );
+
+      if (result.error) {
+        res.status(500).json({ error: result.error });
+      } else {
+        res.sendStatus(204);
+      }
+    },
+  )
+
+  .delete(
+    "/workshops/recurrences/:id/external-animators/:animatorId",
+    authguard,
+    async (req, res) => {
+      const result = await workshopRepository.removeExternalAnimator(
+        parseInt(req.params.id),
+        req.params.animatorId,
       );
 
       if (result.error) {

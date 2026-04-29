@@ -23,6 +23,45 @@ class AdvisorRepository {
     }
   }
 
+  async findMany(nameQuery = undefined) {
+    try {
+      return await this.db.advisor.findMany({
+        where: nameQuery
+          ? {
+              user: {
+                OR: [
+                  { first_name: { startsWith: nameQuery } },
+                  { last_name: { startsWith: nameQuery } },
+                ],
+              },
+            }
+          : undefined,
+        orderBy: [
+          {
+            user: {
+              first_name: "asc",
+            },
+          },
+          {
+            user: {
+              last_name: "asc",
+            },
+          },
+        ],
+        include: {
+          user: {
+            omit: {
+              password: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   async findAssignedJobSeekers(id, nameQuery = undefined) {
     try {
       return (

@@ -7,6 +7,7 @@ import helmet from "helmet";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
 import advisorRouter from "./routes/advisorRouter.js";
+import externalAnimatorRouter from "./routes/externalAnimatorRouter.js";
 import articleRouter from "./routes/articleRouter.js";
 import appointmentRouter from "./routes/appointmentRouter.js";
 import planningRouter from "./routes/planningRouter.js";
@@ -48,6 +49,7 @@ const app = express()
   .use(userRouter)
   .use(profileRouter)
   .use(advisorRouter)
+  .use(externalAnimatorRouter)
   .use(articleRouter)
   .use(workshopRouter)
   .use(appointmentRouter)
