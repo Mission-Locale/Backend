@@ -71,17 +71,12 @@ class WorkshopRepository {
   }
 
   /* find workshops */
-  async findMany({
-    limit = 10,
-    page = 1,
-    name = undefined,
-    order = "asc",
-  } = {}) {
+  async findMany(limit = 10, page = 1, name = undefined, order = "asc") {
     const where = name
       ? { title: { contains: name.toLowerCase() } }
       : undefined;
     try {
-      const count = this.db.workshop.count(where);
+      const count = await this.db.workshop.count({ where });
       if (count == 0) {
         return { count };
       } else

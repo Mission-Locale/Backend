@@ -46,7 +46,7 @@ async function getAppointmentAndWorkshopForJobSeeker(
       await AppointmentRepository.getAll(undefined, jobSeekerId, from, to)
     ).map(mapAppointmentToCalendarEvent),
     ...(
-      await WorkshopRepository.findMany(
+      await WorkshopRepository.findRecurrences(
         undefined,
         undefined,
         jobSeekerId,
@@ -67,7 +67,7 @@ async function getAppointmentAndWorkshopForAdvisor(
       mapAppointmentToCalendarEvent,
     ),
     ...(
-      await WorkshopRepository.findMany(
+      await WorkshopRepository.findRecurrences(
         undefined,
         advisorId,
         undefined,
@@ -94,7 +94,7 @@ const planningRouter = Router()
 
     return res.json(
       (
-        await WorkshopRepository.findMany(
+        await WorkshopRepository.findRecurrences(
           undefined,
           undefined,
           undefined,

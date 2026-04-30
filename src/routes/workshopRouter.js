@@ -10,7 +10,14 @@ const workshopRepository = WorkshopRepository;
 const workshopRouter = Router()
   .get("/workshops", async (req, res) => {
     try {
-      res.json(await workshopRepository.findMany(req.query));
+      res.json(
+        await workshopRepository.findMany(
+          parseInt(req.query.limit),
+          parseInt(req.query.page),
+          req.query.name,
+          req.query.order,
+        ),
+      );
     } catch (err) {
       res.status(400).json({ error: err });
     }
